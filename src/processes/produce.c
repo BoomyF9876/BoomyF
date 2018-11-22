@@ -45,8 +45,9 @@ int main(int argc, char *argv[])
 	attr.mq_maxmsg  = maxmsg;
 	attr.mq_msgsize = sizeof(int);
 	attr.mq_flags   = 0;		/* a blocking queue  */
-
-	qdes = mq_open("/msg_q", O_RDWR | O_CREAT, 0777, &attr);
+	char *filename = "/msg_q";
+	mq_unlink(filename);
+	qdes = mq_open(filename, O_RDWR | O_CREAT, 0777, &attr);
 
 	if (qdes == -1 ) {
 		perror("mq_open() failed");
@@ -68,7 +69,7 @@ int main(int argc, char *argv[])
 			for(j = 0; j< num; j++){
 				if(j % num_p == i){
 					mq_send(qdes, &i, sizeof(int), NULL);
-					printf("sending %d \n", i);
+					printf("sending %d \n", j);
 				}
 			}
 
