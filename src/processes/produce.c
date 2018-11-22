@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 	for (k=0; k<num_c; k++) {
 		int consumer = fork();
 		if (consumer == 0) {
-			double receiver;
+			int receiver;
 			// for(detector = mq_receive(qdes, &receiver, sizeof(int), NULL);receiver != -1;){
 			// 	if (detector == -1) {
 			// 		perror("mq_receive() failed");
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
 			// }
 			while(1){
 				mq_receive(qdes, &receiver, sizeof(int), NULL);
-				printf("Entered and received %f \n", receiver);
+				printf("Entered and received %d \n", receiver);
 				if(sqrt((double)receiver) - floor(sqrt((double)receiver)) == 0){
 					printf("%d       %d        %d\n", i, receiver, sqrt((double)receiver));
 				}
