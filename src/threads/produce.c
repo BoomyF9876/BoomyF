@@ -45,13 +45,13 @@ void* produce( container_p *param ) {
 		printf('p2');
         sem_wait( &f );
         sem_wait( &a );
-		int newend = param.buffer_ptr->end + 1;
-		if (newend == param.buffer_ptr->size) {
-			param.buffer_ptr->buffer[0] = i;
-			param.buffer_ptr->end = 0;
+		int newend = param->buffer_ptr->end + 1;
+		if (newend == param->buffer_ptr->size) {
+			param->buffer_ptr->buffer[0] = i;
+			param->buffer_ptr->end = 0;
 		}
-		param.buffer_ptr->buffer[newend] = i;
-		param.buffer_ptr->end = newend;
+		param->buffer_ptr->buffer[newend] = i;
+		param->buffer_ptr->end = newend;
 		sem_post( &e );
         sem_post( &a );
 	}
@@ -67,11 +67,11 @@ void* consume( container_p *param ) {
         sem_wait( &e );
         sem_wait( &a );
 		int popnum, newstart = 0;
-		if (param.buffer_ptr->start != param.buffer_ptr->end) {
-			newstart = param.buffer_ptr->start + 1;
-			popnum = param.buffer_ptr->buffer[param.buffer_ptr->start];
-			param.buffer_ptr->buffer[param.buffer_ptr->start] = -1;
-			param.buffer_ptr->start = (newstart == param.buffer_ptr->size) ? 0 : newstart;
+		if (param->buffer_ptr->start != param->buffer_ptr->end) {
+			newstart = param->buffer_ptr->start + 1;
+			popnum = param->buffer_ptr->buffer[param->buffer_ptr->start];
+			param->buffer_ptr->buffer[param->buffer_ptr->start] = -1;
+			param->buffer_ptr->start = (newstart == param->buffer_ptr->size) ? 0 : newstart;
 		} else {
 			pthread_exit(0);
 		}
