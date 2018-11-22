@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 		printf("Usage: %s <N> <B> <P> <C>\n", argv[0]);
 		exit(1);
 	}
-
+	printf("I am here1");
 	num = atoi(argv[1]);	/* number of items to produce */
 	maxmsg = atoi(argv[2]); /* buffer size                */
 	num_p = atoi(argv[3]);  /* number of producers        */
@@ -111,19 +111,23 @@ int main(int argc, char *argv[])
 	sem_init( &e, 0, 0);
 
 	container_p p;
-
+	printf("I am here2");
 	p.size = num;
 	for ( int i = 0; i < num_p; ++i ) {
 		p.index = i;
 		p.num_producer = num_p;
+		printf("I am here3");
 		pthread_create(&tid_p[i], NULL, produce, &p);
     }
+	printf("I am here4");
 
 	for ( int j = 0; j < num_c; ++j ) {
 		p.index = i;
 		p.num_producer = num_c;
+		printf("I am here5");
 		pthread_create(&tid_c[i], NULL, consume, &p);
     }
+	printf("I am here6");
 
 
 	for ( int k = 0; k < num_p; ++k ) {
