@@ -104,7 +104,6 @@ int main(int argc, char *argv[])
 	g_time[0] = (tv.tv_sec) + tv.tv_usec/1000000.;
 
 	memset(arr.buffer, 0, sizeof(int)*maxmsg);
-	arr.start = 0;
 	arr.end = 0;
 
 	sem_init( &a, 0, 1 );
