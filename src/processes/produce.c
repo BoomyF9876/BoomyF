@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
 	}
 	while (1) {
 		if (counter == num_p) {
-			for(k=0; i<num_p; k++){
+			for(k=0; k<num_p; k++){
 				waitpid(prod[k], NULL, 0);
 			}
 
