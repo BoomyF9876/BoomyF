@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 	int maxmsg;
 	int num_p;
 	int num_c;
-	int i,j,x;
+	int i,j,x,k;
 	struct timeval tv;
 
 	if (argc != 5) {
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	for (i=0; i<num_c; i++) {
+	for (k=0; k<num_c; k++) {
 		int consumer = fork();
 		if (consumer == 0) {
 			double receiver;
