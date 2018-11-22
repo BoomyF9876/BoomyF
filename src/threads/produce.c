@@ -39,18 +39,19 @@ sem_t f;
 sem_t a;
 
 void* produce( container_p param ) {
+	container_p upper = param;
 	printf('p1');
-	for (int i = param.index; i < param.size; i += param.num_producer) {
+	for (int i = upper.index; i < upper.size; i += upper.num_producer) {
 		printf('p2');
         sem_wait( &f );
         sem_wait( &a );
-		int newend = param.buffer_ptr->end + 1;
-		if (newend == param.buffer_ptr->size) {
-			param.buffer_ptr->buffer[0] = i;
-			param.buffer_ptr->end = 0;
+		int newend = upper.buffer_ptr->end + 1;
+		if (newend == upper.buffer_ptr->size) {
+			upper.buffer_ptr->buffer[0] = i;
+			upper.buffer_ptr->end = 0;
 		}
-		param.buffer_ptr->buffer[newend] = i;
-		param.buffer_ptr->end = newend;
+		upper.buffer_ptr->buffer[newend] = i;
+		upper.buffer_ptr->end = newend;
 		sem_post( &e );
         sem_post( &a );
 	}
@@ -59,27 +60,28 @@ void* produce( container_p param ) {
 }
 
 void* consume( container_p param ) {
+	container_p upper = param;
 	printf('c1');
-	while (count < param.size) {
+	while (count < upper.size) {
 		printf('c2');
         sem_wait( &e );
         sem_wait( &a );
 		int popnum, newstart = 0;
-		if (param.buffer_ptr->start != param.buffer_ptr->end) {
-			newstart = param.buffer_ptr->start + 1;
-			popnum = param.buffer_ptr->buffer[param.buffer_ptr->start];
-			param.buffer_ptr->buffer[param.buffer_ptr->start] = -1;
-			param.buffer_ptr->start = (newstart == param.buffer_ptr->size) ? 0 : newstart;
+		if (upper.buffer_ptr->start != upper.buffer_ptr->end) {
+			newstart = upper.buffer_ptr->start + 1;
+			popnum = upper.buffer_ptr->buffer[upper.buffer_ptr->start];
+			upper.buffer_ptr->buffer[upper.buffer_ptr->start] = -1;
+			upper.buffer_ptr->start = (newstart == upper.buffer_ptr->size) ? 0 : newstart;
 		} else {
 			pthread_exit(0);
 		}
 		count++;
-		if (count >= param.size - param.num_producer) {
+		if (count >= upper.size - upper.num_producer) {
 			pthread_exit(0);
 		}
-		printf("%d       %d       ", param.index, popnum);
+		printf("%d       %d       ", upper.index, popnum);
 		if(sqrt((double)popnum) - floor(sqrt((double)popnum)) == 0){
-			printf("%d       %d        %d", param.index, popnum, (int)sqrt((double)popnum));
+			printf("%d       %d        %d", upper.index, popnum, (int)sqrt((double)popnum));
 		}
 		sem_post( &f );
         sem_post( &a );
@@ -132,13 +134,13 @@ int main(int argc, char *argv[])
 	for ( int i = 0; i < num_p; ++i ) {
 		p.index = i;
 		p.num_producer = num_p;
-		pthread_create(&tid_p[i], NULL, produce, p);
+		pthread_create(&tid_p[i], NULL, produce, &p);
     }
 
 	for ( int j = 0; j < num_c; ++j ) {
 		p.index = i;
 		p.num_producer = num_c;
-		pthread_create(&tid_c[i], NULL, consume, p);
+		pthread_create(&tid_c[i], NULL, consume, &p);
     }
 
 
