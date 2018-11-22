@@ -94,10 +94,9 @@ int main(int argc, char *argv[])
 	int maxmsg;
 	int num_p;
 	int num_c;
-	int i;
+	int i,j,k,l;
 	struct timeval tv;
 	
-
 	if (argc != 5) {
 		printf("Usage: %s <N> <B> <P> <C>\n", argv[0]);
 		exit(1);
@@ -136,18 +135,18 @@ int main(int argc, char *argv[])
 		pthread_create(&tid_p[i], NULL, produce, &p);
     }
 
-	for ( int i = 0; i < num_c; ++i ) {
+	for ( int j = 0; j < num_c; ++j ) {
 		p.index = i;
 		p.num_producer = num_c;
 		pthread_create(&tid_c[i], NULL, consume, &p);
     }
 
 
-	for ( int j = 0; j < num_p; ++j ) {
+	for ( int k = 0; k < num_p; ++k ) {
         pthread_join( tid_p[j], NULL );
     }
 
-	for ( int j = 0; j < num_c; ++j ) {
+	for ( int l = 0; l < num_c; ++l ) {
         pthread_join( tid_c[j], NULL );
     }
 	
