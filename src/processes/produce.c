@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 	int maxmsg;
 	int num_p;
 	int num_c;
-	int i,j,x,k;
+	int i,j,x,k,h;
 	struct timeval tv;
 
 	if (argc != 5) {
@@ -42,6 +42,9 @@ int main(int argc, char *argv[])
 	mqd_t qdes;
 	mode_t mode = S_IRUSR | S_IWUSR;
 	struct mq_attr attr;
+	struct mq_attr attr_1;
+	int prod[num_p];
+	int cons[num_c];
 	attr.mq_maxmsg  = maxmsg;
 	attr.mq_msgsize = sizeof(int);
 	attr.mq_flags   = 0;		/* a blocking queue  */
@@ -56,6 +59,7 @@ int main(int argc, char *argv[])
 
 	for (i=0; i<num_p; i++) {
 		int producer = fork();
+		prod[i] = producer;
 		if (producer == 0) {
 			/*for (j=i;j<num;j+=num_p) {
 				if (i == num_p -1 && j+num_p>num) {
@@ -79,6 +83,7 @@ int main(int argc, char *argv[])
 
 	for (k=0; k<num_c; k++) {
 		int consumer = fork();
+		cons[k] = consumer;
 		if (consumer == 0) {
 			int receiver;
 			// for(detector = mq_receive(qdes, &receiver, sizeof(int), NULL);receiver != -1;){
@@ -96,7 +101,20 @@ int main(int argc, char *argv[])
 					printf("%d       %d        %d\n", i, receiver, (int)sqrt((double)receiver));
 				}
 			}
-			exit(0);
+			//exit(0);
+		}
+	}
+
+	for(k=0; i<num_p; k++){
+		waitpid(prod[k], NULL, 0);
+	}
+
+	while(1){
+		mq_getattr(qdes, &attr_1);
+		if(attr_1.mq_curmsgs == 0){
+			for(h = 0;h < num_c; h++){
+				kill(cons[h], 9);
+			}
 		}
 	}
 
