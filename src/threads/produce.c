@@ -77,9 +77,9 @@ void* consume( container_p param ) {
 		if (count >= param.size - param.num_producer) {
 			pthread_exit(0);
 		}
-		printf("$d       $d       ", param.index, popnum);
+		printf("%d       %d       ", param.index, popnum);
 		if(sqrt((double)popnum) - floor(sqrt((double)popnum)) == 0){
-			printf("$d       $d        $d", param.index, popnum, sqrt((double)popnum));
+			printf("%d       %d        %d", param.index, popnum, sqrt((double)popnum));
 		}
 		sem_post( &f );
         sem_post( &a );
