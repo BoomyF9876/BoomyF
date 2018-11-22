@@ -66,9 +66,9 @@ int main(int argc, char *argv[])
 				}
 			}*/
 		printf("producers starts \n");
-			for(j = 1; j<= num; j++){
+			for(j = 0; j< num; j++){
 				if(j % num_p == i){
-					mq_send(qdes, &i, sizeof(int), NULL);
+					mq_send(qdes, &j, sizeof(int), NULL);
 					printf("sending %d \n", j);
 				}
 			}
