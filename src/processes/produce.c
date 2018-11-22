@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 	attr.mq_flags   = 0;		/* a blocking queue  */
 	char *filename = "/msg_q";
 	mq_unlink(filename);
-	qdes = mq_open(filename, O_RDWR | O_CREAT, 0777, &attr);
+	qdes = mq_open(filename, O_RDWR | O_CREAT, mode, &attr);
 
 	if (qdes == -1 ) {
 		perror("mq_open() failed");
