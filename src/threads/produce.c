@@ -132,13 +132,13 @@ int main(int argc, char *argv[])
 	for ( int i = 0; i < num_p; ++i ) {
 		p.index = i;
 		p.num_producer = num_p;
-		pthread_create(&tid_p[i], NULL, produce, &p);
+		pthread_create(&tid_p[i], NULL, produce, p);
     }
 
 	for ( int j = 0; j < num_c; ++j ) {
 		p.index = i;
 		p.num_producer = num_c;
-		pthread_create(&tid_c[i], NULL, consume, &p);
+		pthread_create(&tid_c[i], NULL, consume, p);
     }
 
 
