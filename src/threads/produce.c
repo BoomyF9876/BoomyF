@@ -38,8 +38,8 @@ sem_t e;
 sem_t f;
 sem_t a;
 
-void* produce( container_p param ) {
-	container_p upper = param;
+void* produce( container_p *param ) {
+	container_p upper = *param;
 	printf('p1');
 	for (int i = upper.index; i < upper.size; i += upper.num_producer) {
 		printf('p2');
@@ -59,8 +59,8 @@ void* produce( container_p param ) {
 	pthread_exit(0);
 }
 
-void* consume( container_p param ) {
-	container_p upper = param;
+void* consume( container_p *param ) {
+	container_p upper = *param;
 	printf('c1');
 	while (count < upper.size) {
 		printf('c2');
