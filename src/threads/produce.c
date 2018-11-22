@@ -116,12 +116,12 @@ int main(int argc, char *argv[])
 	gettimeofday(&tv, NULL);
 	g_time[0] = (tv.tv_sec) + tv.tv_usec/1000000.;
 
-	circuler_arr buff;
+	circuler_arr* buff;
 	int buffer[maxmsg];
-	buff.buffer = buffer;
-	buff.start = 0;
-	buff.end = 0;
-	buff.size = maxmsg;
+	buff->buffer = buffer;
+	buff->start = 0;
+	buff->end = 0;
+	buff->size = maxmsg;
 
 	sem_init( &a, 0, 1 );
 	sem_init( &f, 0, maxmsg);
@@ -129,19 +129,17 @@ int main(int argc, char *argv[])
 
 	container_p p;
 
+	p.size = num;
+	p.buffer_ptr = buff;
 	for ( int i = 0; i < num_p; ++i ) {
-		p.size = num;
 		p.index = i;
 		p.num_producer = num_p;
-		p.buffer_ptr = &buff;
 		pthread_create(&tid_p[i], NULL, produce, &p);
     }
 
 	for ( int i = 0; i < num_c; ++i ) {
-		p.size = num;
 		p.index = i;
 		p.num_producer = num_c;
-		p.buffer_ptr = &buff;
 		pthread_create(&tid_c[i], NULL, consume, &p);
     }
 
