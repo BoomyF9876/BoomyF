@@ -60,8 +60,7 @@ void* produce( container_p param ) {
 
 void* consume( container_p param ) {
 	printf('c1');
-    container_p upper =  param ;
-	while (count < upper.size) {
+	while (count < param.size) {
 		printf('c2');
         sem_wait( &e );
         sem_wait( &a );
@@ -75,7 +74,7 @@ void* consume( container_p param ) {
 			pthread_exit(0);
 		}
 		count++;
-		if (count >= upper.size - upper.num_producer) {
+		if (count >= param.size - param.num_producer) {
 			pthread_exit(0);
 		}
 		printf("$d       $d       ", param.index, popnum);
