@@ -79,6 +79,7 @@ void* consume( container_p param ) {
 
 int main(int argc, char *argv[])
 {
+	printf("I am here 4");
 	int num;
 	int maxmsg;
 	int num_p;
