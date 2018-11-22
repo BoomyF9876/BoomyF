@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
 				}
 			}*/
 		printf("producers starts \n");
-			for(j = 0; j< num; j++){
+			for(j = 1; j<= num; j++){
 				if(j % num_p == i){
 					mq_send(qdes, &i, sizeof(int), NULL);
 					printf("sending %d \n", j);
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 			// 	}
 			// }
 			while(1){
-				mq_receive(qdes, receiver, sizeof(int), NULL);
+				mq_receive(qdes, &receiver, sizeof(int), NULL);
 				printf("Entered and received %d \n", receiver);
 				if(sqrt((double)receiver) - floor(sqrt((double)receiver)) == 0){
 					printf("%d       %d        %d\n", i, receiver, sqrt((double)receiver));
