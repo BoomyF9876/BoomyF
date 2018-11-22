@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 		perror("mq_open() failed");
 		exit(1);
 	}
-
+	counter = 0;
 	for (i=0; i<num_p; i++) {
 		int producer = fork();
 		prod[i] = producer;
