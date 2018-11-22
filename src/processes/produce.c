@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 	int maxmsg;
 	int num_p;
 	int num_c;
-	int i,j,x,k,h;
+	int i,j,x,k,h, counter;
 	struct timeval tv;
 
 	if (argc != 5) {
@@ -60,6 +60,7 @@ int main(int argc, char *argv[])
 	for (i=0; i<num_p; i++) {
 		int producer = fork();
 		prod[i] = producer;
+		counter++;
 		if (producer == 0) {
 			/*for (j=i;j<num;j+=num_p) {
 				if (i == num_p -1 && j+num_p>num) {
@@ -104,21 +105,24 @@ int main(int argc, char *argv[])
 			//exit(0);
 		}
 	}
+	while (1) {
+		if (counter == num_p) {
+			for(k=0; i<num_p; k++){
+				waitpid(prod[k], NULL, 0);
+			}
 
-	for(k=0; i<num_p; k++){
-		waitpid(prod[k], NULL, 0);
-	}
-
-	while(1){
-		mq_getattr(qdes, &attr_1);
-		if(attr_1.mq_curmsgs == 0){
-			for(h = 0;h < num_c; h++){
-				kill(cons[h], 9);
+			while(1){
+				mq_getattr(qdes, &attr_1);
+				if(attr_1.mq_curmsgs == 0){
+					for(h = 0;h < num_c; h++){
+						kill(cons[h], 9);
+					}
+					break;
+				}
 			}
 			break;
 		}
 	}
-
     gettimeofday(&tv, NULL);
     g_time[1] = (tv.tv_sec) + tv.tv_usec/1000000.;
 
