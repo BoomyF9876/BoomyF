@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 			// 	}
 			// }
 			while(1){
-				mq_receive(qdes, &receiver, sizeof(int), NULL);
+				mq_receive(qdes, receiver, sizeof(int), NULL);
 				printf("Entered and received %d \n", receiver);
 				if(sqrt((double)receiver) - floor(sqrt((double)receiver)) == 0){
 					printf("%d       %d        %d\n", i, receiver, sqrt((double)receiver));
