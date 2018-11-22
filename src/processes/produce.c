@@ -115,6 +115,7 @@ int main(int argc, char *argv[])
 			for(h = 0;h < num_c; h++){
 				kill(cons[h], 9);
 			}
+			break;
 		}
 	}
 
