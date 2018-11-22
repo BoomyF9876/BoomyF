@@ -89,6 +89,7 @@ int main(int argc, char *argv[])
 			// 		printf("%d       %d        %d", i, receiver, sqrt((double)receiver));
 			// 	}
 			// }
+			printf("Entered mthrfker\n");
 			while(1){
 				mq_receive(qdes, &receiver, sizeof(int), NULL);
 				if(sqrt((double)receiver) - floor(sqrt((double)receiver)) == 0){
