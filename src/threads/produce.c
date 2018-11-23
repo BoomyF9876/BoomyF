@@ -32,6 +32,7 @@ circuler_arr arr ={
 int maxmsg;
 int num;
 int num_p;
+int num_c;
 int count = 0;
 
 sem_t e;
@@ -58,7 +59,7 @@ void* produce( void* param ) {
 }
 
 void* consume( void* param ) {
-	int count, popnum, newstart  = 0;
+	int popnum, newstart  = 0;
 	printf("c1\n");
 	while (1) {
 		printf("c2\n");
@@ -87,7 +88,6 @@ void* consume( void* param ) {
 int main(int argc, char *argv[])
 {
 	int i,j,k,l;
-	int num_c;
 	int p;
 	struct timeval tv;
 	
