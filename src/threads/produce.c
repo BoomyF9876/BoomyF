@@ -104,6 +104,9 @@ int main(int argc, char *argv[])
 	pthread_t tid_p[num_p];
 	pthread_t tid_c[num_c];
 
+	int ps[num_p];
+	int cs[num_c];
+
 	gettimeofday(&tv, NULL);
 	g_time[0] = (tv.tv_sec) + tv.tv_usec/1000000.;
 
@@ -117,13 +120,13 @@ int main(int argc, char *argv[])
 
 
 	for ( i = 0; i < num_p; ++i ) {
-		p = i;
-		pthread_create(&tid_p[i], NULL, produce, &p);
+		ps[i] = i;
+		pthread_create(&tid_p[i], NULL, produce, &ps[i]);
     }
 
 	for ( j = 0; j < num_c; ++j ) {
-		p = j;
-		pthread_create(&tid_c[j], NULL, consume, &p);
+		cs[j] = j;
+		pthread_create(&tid_c[j], NULL, consume, &cs[j]);
     }
 
 	for ( k = 0; k < num_p; ++k ) {
