@@ -50,6 +50,9 @@ void* produce( void* param ) {
 			}
  			arr.buffer[newend] = i;
 			arr.end = newend;
+			if (newend == 1) {
+				arr.start++;
+			}
 			printf("%d\n", i);
 		sem_post( &e );
         sem_post( &a );
