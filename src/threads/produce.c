@@ -131,6 +131,7 @@ int main(int argc, char *argv[])
 
 	p.size = num;
 	p.buffer_ptr = buff;
+	printf("1\n");
 	for ( int i = 0; i < num_p; ++i ) {
 		p.index = i;
 		p.num_producer = num_p;
