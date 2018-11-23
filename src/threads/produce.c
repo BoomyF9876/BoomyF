@@ -116,12 +116,17 @@ int main(int argc, char *argv[])
 	gettimeofday(&tv, NULL);
 	g_time[0] = (tv.tv_sec) + tv.tv_usec/1000000.;
 
-	circuler_arr buff;
 	int buffer[maxmsg];
-	buff.buffer = buffer;
-	buff.start = 0;
-	buff.end = 0;
-	buff.size = maxmsg;
+	circuler_arr buff = {
+		buffer,
+		0,
+		0,
+		maxmsg
+	};
+	//buff.buffer = buffer;
+	//buff.start = 0;
+	//buff.end = 0;
+	//buff.size = maxmsg;
 
 	sem_init( &a, 0, 1 );
 	sem_init( &f, 0, maxmsg);
