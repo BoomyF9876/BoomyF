@@ -62,7 +62,7 @@ void* consume( void* param ) {
 	int popnum, newstart  = 0;
 	while (1) {
 		if (count > num - num_c) {
-			//printf("A consumer has finished.\n");
+			printf("A consumer has finished.\n");
 			pthread_exit(0);
 		}
         sem_wait( &e );
