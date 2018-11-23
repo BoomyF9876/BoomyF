@@ -24,14 +24,10 @@ typedef struct {
 	int end;
 } circuler_arr;
 
-typedef struct {
-	int size;
-	int index;
-	int num_producer;
-} container_p;
-
 circuler_arr arr;
 int maxmsg;
+int num;
+int num_p;
 
 sem_t e;
 sem_t f;
@@ -40,7 +36,7 @@ sem_t a;
 void* produce( container_p param ) {
 	container_p upper = param;
 	printf('p1');
-	for (int i = upper.index; i < upper.size; i += upper.num_producer) {
+	for (int i = upper.index; i < num; i += num_p) {
 		printf('p2');
         sem_wait( &f );
         sem_wait( &a );
@@ -72,7 +68,7 @@ void* consume( container_p param ) {
 			popnum = arr.buffer[arr.start];
 			arr.start = newstart;
 			count++;
-			if (count >= upper.size - upper.num_producer) {
+			if (count >= upper.size - num_p) {
 				pthread_exit(0);
 			}
 			printf("%d       %d       ", upper.index, popnum);
@@ -89,10 +85,9 @@ void* consume( container_p param ) {
 int main(int argc, char *argv[])
 {
 	printf("I am here 4");
-	int num;
-	int num_p;
-	int num_c;
 	int i,j,k,l;
+	int num_c;
+	int p;
 	struct timeval tv;
 	
 	if (argc != 5) {
@@ -120,20 +115,15 @@ int main(int argc, char *argv[])
 	sem_init( &f, 0, maxmsg);
 	sem_init( &e, 0, 0);
 
-	container_p p;
 	printf("I am here2");
-	p.size = num;
 	for ( int i = 0; i < num_p; ++i ) {
-		p.index = i;
-		p.num_producer = num_p;
+		p = i;
 		printf("I am here3");
 		pthread_create(&tid_p[i], NULL, produce, &p);
     }
 	printf("I am here4");
-
 	for ( int j = 0; j < num_c; ++j ) {
-		p.index = i;
-		p.num_producer = num_c;
+		p = i;
 		printf("I am here5");
 		pthread_create(&tid_c[i], NULL, consume, &p);
     }
