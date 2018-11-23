@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
 	gettimeofday(&tv, NULL);
 	g_time[0] = (tv.tv_sec) + tv.tv_usec/1000000.;
 
-	malloc(arr.buffer, sizeof(int)*maxmsg);
+	arr.buffer = malloc(sizeof(int)*maxmsg);
 	arr.start = 0;
 	arr.end = 0;
 
