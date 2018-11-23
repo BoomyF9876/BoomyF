@@ -73,6 +73,7 @@ void* consume( void* param ) {
 				newstart = 0;
 			}
 			popnum = arr.buffer[arr.start];
+			arr.buffer[arr.start] = 0;
 			arr.start = newstart;
 			count++;
 			if(sqrt((double)popnum) - floor(sqrt((double)popnum)) == 0){
@@ -103,7 +104,7 @@ int main(int argc, char *argv[])
 
 	pthread_t tid_p[num_p];
 	pthread_t tid_c[num_c];
-	
+
 	gettimeofday(&tv, NULL);
 	g_time[0] = (tv.tv_sec) + tv.tv_usec/1000000.;
 
