@@ -91,7 +91,6 @@ void* consume( void* param ) {
 int main(int argc, char *argv[])
 {
 	int i,j,k,l;
-	int p;
 	struct timeval tv;
 	
 	if (argc != 5) {
