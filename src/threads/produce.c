@@ -41,11 +41,12 @@ sem_t a;
 
 void* produce( void* param ) {
 	printf("p1, %d\n", *(int*)param);
+	int newend = 0;
 	for (int i = *(int*)param; i < num; i += num_p) {
 		printf("p2\n");
         sem_wait( &f );
         sem_wait( &a );
-			int newend = arr.end + 1;
+			newend = arr.end + 1;
 			if (newend == maxmsg) {
 				newend = 0;
 			}
@@ -73,7 +74,7 @@ void* consume( void* param ) {
 				newstart = 0;
 			}
 			popnum = arr.buffer[arr.start];
-			arr.buffer[arr.start] = 0;
+			arr.buffer[arr.start] = -1;
 			arr.start = newstart;
 			count++;
 			if(sqrt((double)popnum) - floor(sqrt((double)popnum)) == 0){
