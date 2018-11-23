@@ -68,7 +68,7 @@ void* consume( void* param ) {
 		}
         sem_wait( &e );
         sem_wait( &a );
-			int newstart = arr.start + 1;
+			newstart = arr.start + 1;
 			if (newstart == maxmsg) {
 				newstart = 0;
 			}
