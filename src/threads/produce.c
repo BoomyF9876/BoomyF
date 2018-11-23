@@ -91,9 +91,6 @@ int main(int argc, char *argv[])
 	int p;
 	struct timeval tv;
 	
-	pthread_t tid_p[num_p];
-	pthread_t tid_c[num_c];
-	
 	if (argc != 5) {
 		printf("Usage: %s <N> <B> <P> <C>\n", argv[0]);
 		exit(1);
@@ -104,6 +101,9 @@ int main(int argc, char *argv[])
 	num_p = atoi(argv[3]);  /* number of producers        */
 	num_c = atoi(argv[4]);  /* number of consumers        */
 
+	pthread_t tid_p[num_p];
+	pthread_t tid_c[num_c];
+	
 	gettimeofday(&tv, NULL);
 	g_time[0] = (tv.tv_sec) + tv.tv_usec/1000000.;
 
