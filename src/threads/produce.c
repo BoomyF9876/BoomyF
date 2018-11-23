@@ -65,7 +65,7 @@ void* consume( void* param ) {
 	while (1) {
 		printf("c2\n");
 		if (count > num - num_c) {
-			printf("A consumer has finished.\n");
+			//printf("A consumer has finished.\n");
 			pthread_exit(0);
 		}
         sem_wait( &e );
@@ -79,7 +79,7 @@ void* consume( void* param ) {
 			arr.start = newstart;
 			count++;
 			if(sqrt((double)popnum) - floor(sqrt((double)popnum)) == 0){
-				printf("%d       %d        %d\n", *(int*)param, popnum, (int)sqrt((double)popnum));
+				printf("%d       %d        %d \n", *(int*)param, popnum, (int)sqrt((double)popnum));
 			}
 		sem_post( &f );
         sem_post( &a );
