@@ -40,10 +40,8 @@ sem_t f;
 sem_t a;
 
 void* produce( void* param ) {
-	printf("p1, %d\n", *(int*)param);
 	int newend = 0;
 	for (int i = *(int*)param; i < num; i += num_p) {
-		printf("p2\n");
         sem_wait( &f );
         sem_wait( &a );
 			newend = arr.end + 1;
@@ -52,6 +50,7 @@ void* produce( void* param ) {
 			}
  			arr.buffer[newend] = i;
 			arr.end = newend;
+			printf("%d\n", i);
 		sem_post( &e );
         sem_post( &a );
 	}
@@ -61,9 +60,7 @@ void* produce( void* param ) {
 
 void* consume( void* param ) {
 	int popnum, newstart  = 0;
-	printf("c1\n");
 	while (1) {
-		printf("c2\n");
 		if (count > num - num_c) {
 			//printf("A consumer has finished.\n");
 			pthread_exit(0);
@@ -78,8 +75,9 @@ void* consume( void* param ) {
 			arr.buffer[arr.start] = -1;
 			arr.start = newstart;
 			count++;
+			printf("-%d\n", popnum);
 			if(sqrt((double)popnum) - floor(sqrt((double)popnum)) == 0){
-				printf("%d       %d        %d \n", *(int*)param, popnum, (int)sqrt((double)popnum));
+				printf("%d       %d        %d\n", *(int*)param, popnum, (int)sqrt((double)popnum));
 			}
 		sem_post( &f );
         sem_post( &a );
