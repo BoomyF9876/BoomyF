@@ -24,7 +24,11 @@ typedef struct {
 	int end;
 } circuler_arr;
 
-circuler_arr arr;
+circuler_arr arr ={
+	NULL,
+	0,
+	0
+};
 int maxmsg;
 int num;
 int num_p;
