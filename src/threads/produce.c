@@ -75,7 +75,7 @@ void* consume( void* param ) {
 			arr.buffer[arr.start] = -1;
 			arr.start = newstart;
 			count++;
-			printf("-%d\n", popnum);
+			printf("consumed %d\n", popnum);
 			if(sqrt((double)popnum) - floor(sqrt((double)popnum)) == 0){
 				printf("%d       %d        %d\n", *(int*)param, popnum, (int)sqrt((double)popnum));
 			}
