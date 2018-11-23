@@ -33,10 +33,9 @@ sem_t e;
 sem_t f;
 sem_t a;
 
-void* produce( container_p param ) {
-	container_p upper = param;
+void* produce( int param ) {
 	printf('p1');
-	for (int i = upper.index; i < num; i += num_p) {
+	for (int i = param; i < num; i += num_p) {
 		printf('p2');
         sem_wait( &f );
         sem_wait( &a );
@@ -53,11 +52,10 @@ void* produce( container_p param ) {
 	pthread_exit(0);
 }
 
-void* consume( container_p param ) {
-	container_p upper = param;
+void* consume( int param ) {
 	int count, popnum, newstart  = 0;
 	printf('c1');
-	while (count < upper.size) {
+	while (count < num) {
 		printf('c2');
         sem_wait( &e );
         sem_wait( &a );
@@ -68,12 +66,11 @@ void* consume( container_p param ) {
 			popnum = arr.buffer[arr.start];
 			arr.start = newstart;
 			count++;
-			if (count >= upper.size - num_p) {
+			if (count >= num - num_p) {
 				pthread_exit(0);
 			}
-			printf("%d       %d       ", upper.index, popnum);
 			if(sqrt((double)popnum) - floor(sqrt((double)popnum)) == 0){
-				printf("%d       %d        %d", upper.index, popnum, (int)sqrt((double)popnum));
+				printf("%d       %d        %d", param, popnum, (int)sqrt((double)popnum));
 			}
 		sem_post( &f );
         sem_post( &a );
