@@ -18,12 +18,14 @@
 
 double g_time[2];
 
+//A circular array with two flags inside indicating start and end
 typedef struct {
 	int *buffer;
 	int start;
 	int end;
 } circuler_arr;
 
+//make all the variables that will need in consume/produce function global
 circuler_arr arr ={
 	NULL,
 	0,
@@ -41,6 +43,10 @@ sem_t a;
 
 void* produce( void* param ) {
 	int newend = 0;
+	//pass in the producer index so that we can know where this producer should start
+	//for example, given 5 producers, the index of each will be 0,1,2,3,4
+	//then for the first producer, it should produce 0,5,10,15...
+	//the second producer should produce 1,6,11,16...
 	for (int i = *(int*)param; i < num; i += num_p) {
         sem_wait( &f );
         sem_wait( &a );
@@ -49,11 +55,12 @@ void* produce( void* param ) {
 				newend = 0;
 			}
  			arr.buffer[newend] = i;
+			//edge case appears when the array is empty
 			if (arr.end == -1) {
-				arr.start++;				
+				arr.start++;			
 			}
 			arr.end = newend;
-			printf("%d\n", i);
+			//printf("%d\n", i);
 		sem_post( &e );
         sem_post( &a );
 	}
@@ -64,6 +71,9 @@ void* produce( void* param ) {
 void* consume( void* param ) {
 	int popnum, newstart  = 0;
 	while (1) {
+		//the logic here is when there is only num_c(consumer number) number of tasks to be done,
+		//then after every consumer finished its task, kill it.
+		//Here is the place each consumer will go to after it finished the task.
 		if (count > num - num_c) {
 			printf("A consumer has finished.\n");
 			pthread_exit(0);
@@ -76,6 +86,7 @@ void* consume( void* param ) {
 			}
 			popnum = arr.buffer[arr.start];
 			arr.buffer[arr.start] = -1;
+			//need to set both flags to the initial value if the array is empty
 			if (arr.start == arr.end) {
 				arr.end = -1;
 				arr.start = -1;
@@ -83,14 +94,13 @@ void* consume( void* param ) {
 				arr.start = newstart;
 			}
 			count++;
-			printf("consumed %d\n", popnum);
+			//printf("consumed %d\n", popnum);
 			if(sqrt((double)popnum) - floor(sqrt((double)popnum)) == 0){
 				printf("%d       %d        %d\n", *(int*)param, popnum, (int)sqrt((double)popnum));
 			}
 		sem_post( &f );
         sem_post( &a );
 	}
-	//pthread_exit(0);
 }
 
 int main(int argc, char *argv[])
@@ -120,12 +130,11 @@ int main(int argc, char *argv[])
 	arr.buffer = malloc(sizeof(int)*maxmsg);
 	arr.start = -1;
 	arr.end = -1;
-
+	//init semaphore
 	sem_init( &a, 0, 1 );
 	sem_init( &f, 0, maxmsg);
 	sem_init( &e, 0, 0);
-
-
+	//create semaphore
 	for ( i = 0; i < num_p; ++i ) {
 		ps[i] = i;
 		pthread_create(&tid_p[i], NULL, produce, &ps[i]);
@@ -143,7 +152,7 @@ int main(int argc, char *argv[])
 	for ( l = 0; l < num_c; ++l ) {
         pthread_join( tid_c[l], NULL );
     }
-	
+	//destroy semaphore
     sem_destroy( &a );
 	sem_destroy( &f );
 	sem_destroy( &e );
