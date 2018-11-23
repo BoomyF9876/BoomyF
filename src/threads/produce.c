@@ -32,6 +32,7 @@ circuler_arr arr ={
 int maxmsg;
 int num;
 int num_p;
+int count = 0;
 
 sem_t e;
 sem_t f;
@@ -59,8 +60,11 @@ void* produce( void* param ) {
 void* consume( void* param ) {
 	int count, popnum, newstart  = 0;
 	printf("c1\n");
-	while (count < num) {
+	while (1) {
 		printf("c2\n");
+		if (count > num - num_c) {
+			pthread_exit(0);
+		}
         sem_wait( &e );
         sem_wait( &a );
 			int newstart = arr.start + 1;
@@ -70,9 +74,6 @@ void* consume( void* param ) {
 			popnum = arr.buffer[arr.start];
 			arr.start = newstart;
 			count++;
-			if (count >= num - num_p) {
-				pthread_exit(0);
-			}
 			if(sqrt((double)popnum) - floor(sqrt((double)popnum)) == 0){
 				printf("%d       %d        %d", *(int*)param, popnum, (int)sqrt((double)popnum));
 			}
@@ -125,8 +126,6 @@ int main(int argc, char *argv[])
 		p = j;
 		pthread_create(&tid_c[j], NULL, consume, &p);
     }
-
-
 
 	for ( k = 0; k < num_p; ++k ) {
         pthread_join( tid_p[k], NULL );
