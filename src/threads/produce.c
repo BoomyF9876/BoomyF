@@ -38,9 +38,9 @@ sem_t f;
 sem_t a;
 
 void* produce( int param ) {
-	printf('p1');
+	printf("p1");
 	for (int i = param; i < num; i += num_p) {
-		printf('p2');
+		printf("p2");
         sem_wait( &f );
         sem_wait( &a );
 			int newend = arr.end + 1;
@@ -58,9 +58,9 @@ void* produce( int param ) {
 
 void* consume( int param ) {
 	int count, popnum, newstart  = 0;
-	printf('c1');
+	printf("c1");
 	while (count < num) {
-		printf('c2');
+		printf("c2");
         sem_wait( &e );
         sem_wait( &a );
 			int newstart = arr.start + 1;
@@ -91,19 +91,19 @@ int main(int argc, char *argv[])
 	int p;
 	struct timeval tv;
 	
+	pthread_t tid_p[num_p];
+	pthread_t tid_c[num_c];
+	
 	if (argc != 5) {
 		printf("Usage: %s <N> <B> <P> <C>\n", argv[0]);
 		exit(1);
 	}
+
 	printf("I am here1");
 	num = atoi(argv[1]);	/* number of items to produce */
 	maxmsg = atoi(argv[2]); /* buffer size                */
 	num_p = atoi(argv[3]);  /* number of producers        */
 	num_c = atoi(argv[4]);  /* number of consumers        */
-
-	pthread_t tid_p[num_p];
-	pthread_t tid_c[num_c];
-
 
 	gettimeofday(&tv, NULL);
 	g_time[0] = (tv.tv_sec) + tv.tv_usec/1000000.;
