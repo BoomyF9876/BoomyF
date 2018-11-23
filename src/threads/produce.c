@@ -49,10 +49,10 @@ void* produce( void* param ) {
 				newend = 0;
 			}
  			arr.buffer[newend] = i;
-			arr.end = newend;
-			if (newend == 1) {
-				arr.start++;
+			if (arr.end == -1) {
+				arr.start++;				
 			}
+			arr.end = newend;
 			printf("%d\n", i);
 		sem_post( &e );
         sem_post( &a );
@@ -76,7 +76,12 @@ void* consume( void* param ) {
 			}
 			popnum = arr.buffer[arr.start];
 			arr.buffer[arr.start] = -1;
-			arr.start = newstart;
+			if (arr.start == arr.end) {
+				arr.end = -1;
+				arr.start = -1;
+			} else {
+				arr.start = newstart;
+			}
 			count++;
 			printf("consumed %d\n", popnum);
 			if(sqrt((double)popnum) - floor(sqrt((double)popnum)) == 0){
