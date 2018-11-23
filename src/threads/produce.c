@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <mqueue.h>
+//#include <mqueue.h>
 #include <sys/stat.h>
 #include <time.h>
 #include <sys/time.h>
@@ -38,9 +38,9 @@ sem_t f;
 sem_t a;
 
 void* produce( void* param ) {
-	printf("p1");
-	for (int i = (int*)param; i < num; i += num_p) {
-		printf("p2");
+	printf("p1, %d\n", *(int*)param);
+	for (int i = *(int*)param; i < num; i += num_p) {
+		printf("p2\n");
         sem_wait( &f );
         sem_wait( &a );
 			int newend = arr.end + 1;
@@ -58,9 +58,9 @@ void* produce( void* param ) {
 
 void* consume( void* param ) {
 	int count, popnum, newstart  = 0;
-	printf("c1");
+	printf("c1\n");
 	while (count < num) {
-		printf("c2");
+		printf("c2\n");
         sem_wait( &e );
         sem_wait( &a );
 			int newstart = arr.start + 1;
@@ -74,7 +74,7 @@ void* consume( void* param ) {
 				pthread_exit(0);
 			}
 			if(sqrt((double)popnum) - floor(sqrt((double)popnum)) == 0){
-				printf("%d       %d        %d", (int*)param, popnum, (int)sqrt((double)popnum));
+				printf("%d       %d        %d", *(int*)param, popnum, (int)sqrt((double)popnum));
 			}
 		sem_post( &f );
         sem_post( &a );
@@ -85,7 +85,6 @@ void* consume( void* param ) {
 
 int main(int argc, char *argv[])
 {
-	printf("I am here 4");
 	int i,j,k,l;
 	int num_c;
 	int p;
@@ -99,7 +98,6 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
-	printf("I am here1");
 	num = atoi(argv[1]);	/* number of items to produce */
 	maxmsg = atoi(argv[2]); /* buffer size                */
 	num_p = atoi(argv[3]);  /* number of producers        */
@@ -116,19 +114,18 @@ int main(int argc, char *argv[])
 	sem_init( &f, 0, maxmsg);
 	sem_init( &e, 0, 0);
 
-	printf("I am here2");
+
 	for ( i = 0; i < num_p; ++i ) {
 		p = i;
-		printf("I am here3");
+
 		pthread_create(&tid_p[i], NULL, produce, &p);
     }
-	printf("I am here4");
+
 	for ( j = 0; j < num_c; ++j ) {
 		p = j;
-		printf("I am here5");
 		pthread_create(&tid_c[j], NULL, consume, &p);
     }
-	printf("I am here6");
+
 
 
 	for ( k = 0; k < num_p; ++k ) {
