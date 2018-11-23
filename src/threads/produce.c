@@ -39,7 +39,7 @@ sem_t a;
 
 void* produce( void* param ) {
 	printf("p1");
-	for (int i = *param; i < num; i += num_p) {
+	for (int i = (int*)param; i < num; i += num_p) {
 		printf("p2");
         sem_wait( &f );
         sem_wait( &a );
@@ -74,7 +74,7 @@ void* consume( void* param ) {
 				pthread_exit(0);
 			}
 			if(sqrt((double)popnum) - floor(sqrt((double)popnum)) == 0){
-				printf("%d       %d        %d", *param, popnum, (int)sqrt((double)popnum));
+				printf("%d       %d        %d", (int*)param, popnum, (int)sqrt((double)popnum));
 			}
 		sem_post( &f );
         sem_post( &a );
