@@ -111,8 +111,8 @@ int main(int argc, char *argv[])
 	g_time[0] = (tv.tv_sec) + tv.tv_usec/1000000.;
 
 	arr.buffer = malloc(sizeof(int)*maxmsg);
-	arr.start = 0;
-	arr.end = 0;
+	arr.start = -1;
+	arr.end = -1;
 
 	sem_init( &a, 0, 1 );
 	sem_init( &f, 0, maxmsg);
