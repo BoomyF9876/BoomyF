@@ -37,9 +37,9 @@ sem_t e;
 sem_t f;
 sem_t a;
 
-void* produce( int param ) {
+void* produce( void* param ) {
 	printf("p1");
-	for (int i = param; i < num; i += num_p) {
+	for (int i = *param; i < num; i += num_p) {
 		printf("p2");
         sem_wait( &f );
         sem_wait( &a );
@@ -56,7 +56,7 @@ void* produce( int param ) {
 	pthread_exit(0);
 }
 
-void* consume( int param ) {
+void* consume( void* param ) {
 	int count, popnum, newstart  = 0;
 	printf("c1");
 	while (count < num) {
@@ -74,7 +74,7 @@ void* consume( int param ) {
 				pthread_exit(0);
 			}
 			if(sqrt((double)popnum) - floor(sqrt((double)popnum)) == 0){
-				printf("%d       %d        %d", param, popnum, (int)sqrt((double)popnum));
+				printf("%d       %d        %d", *param, popnum, (int)sqrt((double)popnum));
 			}
 		sem_post( &f );
         sem_post( &a );
@@ -117,26 +117,26 @@ int main(int argc, char *argv[])
 	sem_init( &e, 0, 0);
 
 	printf("I am here2");
-	for ( int i = 0; i < num_p; ++i ) {
+	for ( i = 0; i < num_p; ++i ) {
 		p = i;
 		printf("I am here3");
 		pthread_create(&tid_p[i], NULL, produce, &p);
     }
 	printf("I am here4");
-	for ( int j = 0; j < num_c; ++j ) {
-		p = i;
+	for ( j = 0; j < num_c; ++j ) {
+		p = j;
 		printf("I am here5");
-		pthread_create(&tid_c[i], NULL, consume, &p);
+		pthread_create(&tid_c[j], NULL, consume, &p);
     }
 	printf("I am here6");
 
 
-	for ( int k = 0; k < num_p; ++k ) {
-        pthread_join( tid_p[j], NULL );
+	for ( k = 0; k < num_p; ++k ) {
+        pthread_join( tid_p[k], NULL );
     }
 
-	for ( int l = 0; l < num_c; ++l ) {
-        pthread_join( tid_c[j], NULL );
+	for ( l = 0; l < num_c; ++l ) {
+        pthread_join( tid_c[l], NULL );
     }
 	
     sem_destroy( &a );
