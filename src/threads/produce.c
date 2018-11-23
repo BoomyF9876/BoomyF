@@ -20,6 +20,7 @@ double g_time[2];
 
 typedef struct {
 	int *buffer;
+	int start;
 	int end;
 } circuler_arr;
 
@@ -30,6 +31,7 @@ typedef struct {
 } container_p;
 
 circuler_arr arr;
+int maxmsg;
 
 sem_t e;
 sem_t f;
@@ -42,8 +44,12 @@ void* produce( container_p param ) {
 		printf('p2');
         sem_wait( &f );
         sem_wait( &a );
-			memset(arr.buffer + arr.end, i, sizeof(int));
-			arr.end++;
+			int newend = arr.end + 1;
+			if (newend == maxmsg) {
+				newend = 0;
+			}
+ 			arr.buffer[newend] = i;
+			arr.end = newend;
 		sem_post( &e );
         sem_post( &a );
 	}
@@ -59,9 +65,12 @@ void* consume( container_p param ) {
 		printf('c2');
         sem_wait( &e );
         sem_wait( &a );
-			popnum = arr.buffer[arr.end];
-			memset(arr.buffer + arr.end, 0, sizeof(int));
-			arr.end--;
+			int newstart = arr.start + 1;
+			if (newstart == maxmsg) {
+				newstart = 0;
+			}
+			popnum = arr.buffer[arr.start];
+			arr.start = newstart;
 			count++;
 			if (count >= upper.size - upper.num_producer) {
 				pthread_exit(0);
@@ -81,7 +90,6 @@ int main(int argc, char *argv[])
 {
 	printf("I am here 4");
 	int num;
-	int maxmsg;
 	int num_p;
 	int num_c;
 	int i,j,k,l;
@@ -104,7 +112,8 @@ int main(int argc, char *argv[])
 	gettimeofday(&tv, NULL);
 	g_time[0] = (tv.tv_sec) + tv.tv_usec/1000000.;
 
-	memset(arr.buffer, 0, sizeof(int)*maxmsg);
+	malloc(arr.buffer, sizeof(int)*maxmsg);
+	arr.start = 0;
 	arr.end = 0;
 
 	sem_init( &a, 0, 1 );
