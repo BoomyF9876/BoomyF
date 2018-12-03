@@ -1,0 +1,283 @@
+/**
+ * @file memory.c
+ * @brief: ECE254 Lab: memory allocation algorithm comparison template file
+ * @author: 
+ * @date: 2015-11-20
+ */
+
+/* includes */
+#include <stdio.h> 
+#include <stdlib.h> 
+#include "mem.h"
+
+/* defines */
+typedef struct {
+	node* prev;
+	node* next;
+	int size;
+	int state; // 1 for occupied, 0 for vacant
+	void* start;
+}node;
+/* global variables */
+void *test_mem_best;
+void *test_mem_worst;
+/* Functions */
+void *find_best_node (size_t size) {
+	int best_size = 9999999;
+	int full = 1;
+	int test_size;
+	void *temp_mem_best = test_mem_best;
+	node* return_node;
+	while (temp_mem_best != NULL) {
+		if (!temp_mem_best -> state) {
+			test_size = temp_mem_best->size - size; 
+			if (test_size > 0 && test_size < best_size) {
+				return_node = (node *)temp_mem_best;
+				full = 0;
+			}
+		}
+		temp_mem_best = temp_mem_best -> next;
+	}
+	return (full == 1) ? NULL : return_node;
+}
+
+void *find_worst_node (size_t size) {
+	int best_size = 0;
+	int full = 1;
+	int test_size;
+	void *temp_mem_best = test_mem_best;
+	node* return_node;
+	while (temp_mem_best != NULL) {
+		if (!temp_mem_best -> state) {
+			test_size = temp_mem_best->size - size; 
+			if (test_size > 0 && test_size > best_size) {
+				return_node = (node *)temp_mem_best;
+				full = 0;
+			}
+		}
+		temp_mem_best = temp_mem_best -> next;
+	}
+	return (full == 1) ? NULL : return_node;
+}
+
+/* memory initializer */
+int best_fit_memory_init(size_t size)
+{
+	size_t size_n;
+	size_n = size + sizeof(node);
+	node *root_node;
+	root_node->size = size;
+	root_node->state = 0;
+	test_mem_best = malloc(size_n);
+	root_node = test_mem_best;
+	root_node->start = test_mem_best + sizeof(node);
+	root_node->prev = NULL;
+	root_node->next = NULL;
+	// To be completed by students
+	// You call malloc once here to obtain the memory to be managed.
+	return 0;
+
+}
+
+int worst_fit_memory_init(size_t size)
+{
+	size_t size_n;
+	size_n = size + sizeof(node);
+	node *root_node;
+	root_node->size = size;
+	root_node->state = 0;
+	test_mem_worst = malloc(size_n);
+	root_node = test_mem_worst;
+	root_node->start = test_mem_worst + sizeof(node);
+	root_node->prev = NULL;
+	root_node->next = NULL;
+	// To be completed by students
+	// You call malloc once here to obtain the memory to be managed.
+	return 0;
+
+}
+
+/* memory allocators */
+void *best_fit_alloc(size_t size)
+{
+	int size_flag = size % 4;
+	if (size_flag) {
+		size += (4 - size_flag);
+	}
+	node *cur_node = find_best_node(size);
+	if (cur_node == NULL) {
+		return NULL;
+	}
+	cur_node->state = 1;
+	if (cur_node->size > size) {
+		node *new_node;			
+		new_node ->start = cur_node->start + size + sizeof(node);
+		new_node ->prev = cur_node;
+		new_node ->next = cur_node ->next;
+		new_node ->size = cur_node->size - size - sizeof(node);
+		new_node ->state = 0;
+		cur_node ->next->previous = new_node;
+		cur_node ->size = size;
+		cur_node ->next = new_node;
+	}
+	// To be completed by students
+	return cur_node;
+}
+
+
+void *worst_fit_alloc(size_t size)
+{
+	int size_flag = size % 4;
+	if (size_flag) {
+		size += (4 - size_flag);
+	}
+	node *cur_node = find_worst_node(size);
+	if (cur_node == NULL) {
+		return NULL;
+	}
+	cur_node->state = 1;
+	if (cur_node->size > size) {
+		node *new_node;			
+		new_node ->start = cur_node->start + size + sizeof(node);
+		new_node ->prev = cur_node;
+		new_node ->next = cur_node ->next;
+		new_node ->size = cur_node->size - size - sizeof(node);
+		new_node ->state = 0;
+		cur_node ->next->previous = new_node;
+		cur_node ->size = size;
+		cur_node ->next = new_node;
+	}
+	// To be completed by students
+	return cur_node;
+	// To be completed by students
+}
+
+/* memory de-allocator */
+void best_fit_dealloc(void *ptr) 
+{
+	if (ptr == NULL) {
+		return;
+	}
+	void *temp_mem_best = test_mem_best;
+	int isNode = 0;
+	while (temp_mem_best != NULL) {
+		if (ptr == temp_mem_best) {
+			isNode = 1;
+			continue;
+		}
+		temp_mem_best = temp_mem_best ->next;
+	}
+	if (!isNode) {
+		return;
+	}
+	node *dealloc_target = (node *)ptr;
+	dealloc_target ->state = 0;
+	node *dealloc_prev = dealloc_target ->prev;
+	node *dealloc_next = dealloc_target ->next;
+	while (dealloc_prev != NULL || dealloc_next != NULL) {
+		if (dealloc_next != NULL) {
+			if (dealloc_next ->state == 0) {
+				dealloc_target ->size += dealloc_next ->size + sizeof(node);
+				dealloc_target ->next ->next ->prev = dealloc_target;
+				dealloc_target ->next = dealloc_target ->next ->next;
+				dealloc_next = dealloc_next ->next;
+			} else {
+				dealloc_next = NULL;
+			}
+		}
+
+		if (dealloc_prev != NULL) {
+			if (dealloc_prev ->state == 0) {
+				dealloc_target ->size += dealloc_prev ->size + sizeof(node);
+				dealloc_target ->prev ->prev ->next = dealloc_target;
+				dealloc_target ->prev = dealloc_target ->prev ->prev;
+				dealloc_target ->start = dealloc_prev ->start;
+				dealloc_prev = dealloc_prev ->prev;
+			} else {
+				dealloc_prev = NULL;
+			}
+		} 
+	}
+	// To be completed by students
+	return;
+}
+
+void worst_fit_dealloc(void *ptr) 
+{
+	if (ptr == NULL) {
+		return;
+	}
+	void *temp_mem_best = test_mem_best;
+	int isNode = 0;
+	while (temp_mem_best != NULL) {
+		if (ptr == temp_mem_best) {
+			isNode = 1;
+			continue;
+		}
+		temp_mem_best = temp_mem_best ->next;
+	}
+	if (!isNode) {
+		return;
+	}
+	node *dealloc_target = (node *)ptr;
+	dealloc_target ->state = 0;
+	node *dealloc_prev = dealloc_target ->prev;
+	node *dealloc_next = dealloc_target ->next;
+	while (dealloc_prev != NULL || dealloc_next != NULL) {
+		if (dealloc_next != NULL) {
+			if (dealloc_next ->state == 0) {
+				dealloc_target ->size += dealloc_next ->size + sizeof(node);
+				dealloc_target ->next ->next ->prev = dealloc_target;
+				dealloc_target ->next = dealloc_target ->next ->next;
+				dealloc_next = dealloc_next ->next;
+			} else {
+				dealloc_next = NULL;
+			}
+		}
+
+		if (dealloc_prev != NULL) {
+			if (dealloc_prev ->state == 0) {
+				dealloc_target ->size += dealloc_prev ->size + sizeof(node);
+				dealloc_target ->prev ->prev ->next = dealloc_target;
+				dealloc_target ->prev = dealloc_target ->prev ->prev;
+				dealloc_target ->start = dealloc_prev ->start;
+				dealloc_prev = dealloc_prev ->prev;
+			} else {
+				dealloc_prev = NULL;
+			}
+		} 
+	}
+	// To be completed by students
+	return;
+}
+
+/* memory algorithm metric utility function(s) */
+
+/* count how many free blocks are less than the input size */ 
+int best_fit_count_extfrag(size_t size)
+{
+	int count;
+	node *temp_mem_best = test_mem_best;
+	while (temp_mem_best != NULL) {
+		if (temp_mem_best ->state == 0 && temp_mem_best ->size < size) {
+			count++;
+		}
+		temp_mem_best = temp_mem_best ->next;
+	}
+	// To be completed by students
+	return count;
+}
+
+int worst_fit_count_extfrag(size_t size)
+{
+	int count;
+	node *temp_mem_worst = test_mem_worst;
+	while (temp_mem_worst != NULL) {
+		if (temp_mem_worst ->state == 0 && temp_mem_worst ->size < size) {
+			count++;
+		}
+		temp_mem_worst = temp_mem_worst ->next;
+	}
+	// To be completed by students
+	return count;
+}
