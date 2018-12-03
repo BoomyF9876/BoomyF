@@ -162,6 +162,7 @@ void *worst_fit_alloc(size_t size)
 		cur_node ->next = new_node;
 	}
 	// To be completed by students
+	printf("qweweqe\n");
 	return cur_node;
 	// To be completed by students
 }
