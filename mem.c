@@ -293,3 +293,20 @@ int worst_fit_count_extfrag(size_t size)
 	// To be completed by students
 	return count;
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void print_mem_info(int type) {
+	struct node* traverse;
+	if(type == 0) {
+		traverse = (struct node*)worst_fit_mem;
+	}
+	else if(type == 1) {
+		traverse = (struct node*)best_fit_mem;
+	}
+	
+	while(traverse != NULL){
+		printf("Control Address: %lu\tSize: %d\tState: %d\n",
+			(long unsigned int)traverse, traverse->size, traverse->state);
+		traverse=traverse->next;
+	}
+}
