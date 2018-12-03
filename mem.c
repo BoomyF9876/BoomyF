@@ -49,12 +49,9 @@ void *find_worst_node (size_t size) {
 	struct node* return_node;
 	while (temp_mem_worst != NULL) {
 		if (!temp_mem_worst -> state) {
-			test_size = temp_mem_worst->size - size; 
-			//printf("%d\n", test_size);
+			test_size = temp_mem_worst->size - size;
 			if (test_size > 0 && test_size > best_size) {
-				//printf("asdad\n");
 				return_node = (struct node *)temp_mem_worst;
-				//printf("qweqweq%d\n", return_node->size);
 				full = 0;
 			}
 		}
@@ -234,14 +231,14 @@ void worst_fit_dealloc(void *ptr)
 	if (ptr == NULL) {
 		return;
 	}
-	struct node *temp_mem_best = (struct node *)test_mem_best;
+	struct node *temp_mem_worst = (struct node *)test_mem_worst;
 	int isNode = 0;
-	while (temp_mem_best != NULL) {
-		if (ptr == temp_mem_best) {
+	while (temp_mem_worst != NULL) {
+		if (ptr == temp_mem_worst) {
 			isNode = 1;
 			continue;
 		}
-		temp_mem_best = temp_mem_best ->next;
+		temp_mem_worst = temp_mem_worst ->next;
 	}
 	if (!isNode) {
 		return;
