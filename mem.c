@@ -117,8 +117,8 @@ void *best_fit_alloc(size_t size)
 	}
 	cur_node->state = 1;
 	if (cur_node->size > size) {
-		struct node *new_node;			
-		new_node ->start = cur_node->start + size + 1;
+		struct node *new_node = cur_node->start + size;			
+		new_node ->start = cur_node->start + size + sizeof(struct node);
 		new_node ->prev = cur_node;
 		new_node ->next = cur_node ->next;
 		new_node ->size = cur_node->size - size - sizeof(struct node);
@@ -151,9 +151,9 @@ void *worst_fit_alloc(size_t size)
 		printf("%d\n", cur_node->size);
 	if (cur_node->size > size) {
 				printf("%d\n", cur_node->size);
-		struct node *new_node;
+		struct node *new_node = cur_node->start + size;
 		printf("cnm-2\n");		
-		new_node ->start = cur_node->start + (int)size + sizeof(struct node);
+		new_node ->start = cur_node->start + size + sizeof(struct node);
 		printf("cnm-1\n");
 		new_node ->prev = cur_node;
 		printf("cnm0\n");
