@@ -60,7 +60,6 @@ void *find_worst_node (size_t size) {
 			}
 		}
 		temp_mem_worst = temp_mem_worst -> next;
-		printf("xzczcz%d\n", return_node->size);
 	}
 	return (full == 1) ? NULL : return_node;
 }
