@@ -12,8 +12,8 @@
 
 /* defines */
 typedef struct {
-	node* prev;
-	node* next;
+	struct node* prev;
+	struct node* next;
 	int size;
 	int state; // 1 for occupied, 0 for vacant
 	void* start;
@@ -26,10 +26,10 @@ void *find_best_node (size_t size) {
 	int best_size = 9999999;
 	int full = 1;
 	int test_size;
-	void *temp_mem_best = test_mem_best;
+	node *temp_mem_best = (node *)test_mem_best;
 	node* return_node;
 	while (temp_mem_best != NULL) {
-		if (!temp_mem_best -> state) {
+		if (!temp_mem_best ->state) {
 			test_size = temp_mem_best->size - size; 
 			if (test_size > 0 && test_size < best_size) {
 				return_node = (node *)temp_mem_best;
@@ -45,7 +45,7 @@ void *find_worst_node (size_t size) {
 	int best_size = 0;
 	int full = 1;
 	int test_size;
-	void *temp_mem_best = test_mem_best;
+	node *temp_mem_best = (node *)test_mem_best;
 	node* return_node;
 	while (temp_mem_best != NULL) {
 		if (!temp_mem_best -> state) {
@@ -116,7 +116,7 @@ void *best_fit_alloc(size_t size)
 		new_node ->next = cur_node ->next;
 		new_node ->size = cur_node->size - size - sizeof(node);
 		new_node ->state = 0;
-		cur_node ->next->previous = new_node;
+		cur_node ->next->prev = new_node;
 		cur_node ->size = size;
 		cur_node ->next = new_node;
 	}
@@ -143,7 +143,7 @@ void *worst_fit_alloc(size_t size)
 		new_node ->next = cur_node ->next;
 		new_node ->size = cur_node->size - size - sizeof(node);
 		new_node ->state = 0;
-		cur_node ->next->previous = new_node;
+		cur_node ->next->prev = new_node;
 		cur_node ->size = size;
 		cur_node ->next = new_node;
 	}
@@ -158,7 +158,7 @@ void best_fit_dealloc(void *ptr)
 	if (ptr == NULL) {
 		return;
 	}
-	void *temp_mem_best = test_mem_best;
+	node *temp_mem_best = (node *)test_mem_best;
 	int isNode = 0;
 	while (temp_mem_best != NULL) {
 		if (ptr == temp_mem_best) {
