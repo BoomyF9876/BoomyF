@@ -91,6 +91,7 @@ int worst_fit_memory_init(size_t size)
 	root_node->start = test_mem_worst + sizeof(struct node);
 	root_node->prev = NULL;
 	root_node->next = NULL;
+	printf("adaadadadada %d \n", root_node->size);
 	// To be completed by students
 	// You call malloc once here to obtain the memory to be managed.
 	return 0;
@@ -100,6 +101,7 @@ int worst_fit_memory_init(size_t size)
 /* memory allocators */
 void *best_fit_alloc(size_t size)
 {
+	printf("entered 1");
 	int size_flag = size % 4;
 	if (size_flag) {
 		size += (4 - size_flag);
@@ -129,6 +131,7 @@ void *best_fit_alloc(size_t size)
 
 void *worst_fit_alloc(size_t size)
 {
+	printf("entered 0");
 	int size_flag = size % 4;
 	if (size_flag) {
 		size += (4 - size_flag);
