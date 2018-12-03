@@ -55,11 +55,12 @@ void *find_worst_node (size_t size) {
 			if (test_size > 0 && test_size > best_size) {
 				printf("asdad\n");
 				return_node = (struct node *)temp_mem_worst;
-				printf("meiyouzher\n");
+				printf("qweqweq%d\n", return_node->size);
 				full = 0;
 			}
 		}
 		temp_mem_worst = temp_mem_worst -> next;
+		printf("xzczcz%d\n", return_node->size);
 	}
 	return (full == 1) ? NULL : return_node;
 }
