@@ -47,10 +47,13 @@ void *find_worst_node (size_t size) {
 	int test_size;
 	struct node *temp_mem_worst = (struct node *)test_mem_worst;
 	struct node* return_node;
+	printf("%d\n", temp_mem_worst->size);
 	while (temp_mem_worst != NULL) {
 		if (!temp_mem_worst -> state) {
 			test_size = temp_mem_worst->size - size; 
+			printf("%d\n", test_size);
 			if (test_size > 0 && test_size > best_size) {
+				printf("asdad\n");
 				return_node = (struct node *)temp_mem_worst;
 				full = 0;
 			}
