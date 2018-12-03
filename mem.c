@@ -183,7 +183,7 @@ void best_fit_dealloc(void *ptr)
 	while (temp_mem_best != NULL) {
 		if (ptr == temp_mem_best) {
 			isNode = 1;
-			continue;
+			break;
 		}
 		temp_mem_best = temp_mem_best ->next;
 	}
@@ -235,10 +235,10 @@ void worst_fit_dealloc(void *ptr)
 	printf("3");
 	int isNode = 0;
 	while (temp_mem_worst != NULL) {
-		printf("in\n");		
+		printf("in\n");	
 		if (ptr == temp_mem_worst) {
 			isNode = 1;
-			continue;
+			break;
 		}
 		temp_mem_worst = temp_mem_worst ->next;
 	}
