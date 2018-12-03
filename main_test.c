@@ -30,9 +30,7 @@ void test1_worst_fit() {
 	printf("Full\n");
 	print_mem_info(0);
 	printf("---\n");
-	printf("cnm1\n");
 	worst_fit_dealloc(a);
-		printf("cnm2\n");
 	worst_fit_dealloc(c);
 
 	printf("Freed blocks 1 and 3\n");
