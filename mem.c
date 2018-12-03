@@ -222,8 +222,6 @@ void best_fit_dealloc(void *ptr)
 			}
 		} 
 	}
-	// To be completed by students
-	return;
 }
 
 void worst_fit_dealloc(void *ptr) 
@@ -234,7 +232,7 @@ void worst_fit_dealloc(void *ptr)
 	}
 	printf("2");
 	struct node *temp_mem_worst = (struct node *)test_mem_worst;
-printf("3");
+	printf("3");
 	int isNode = 0;
 	while (temp_mem_worst != NULL) {
 		if (ptr == temp_mem_worst) {
@@ -283,7 +281,6 @@ printf("3");
 	}
 		printf("wo tm chu lai le\n");
 	// To be completed by students
-	return;
 }
 
 /* memory algorithm metric utility function(s) */
