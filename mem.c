@@ -116,7 +116,9 @@ void *best_fit_alloc(size_t size)
 		new_node ->next = cur_node ->next;
 		new_node ->size = cur_node->size - size - sizeof(node);
 		new_node ->state = 0;
-		cur_node ->next->prev = new_node;
+		if (cur_node -> next != NULL) {
+			cur_node ->next -> prev = new_node;
+		}
 		cur_node ->size = size;
 		cur_node ->next = new_node;
 	}
@@ -143,7 +145,9 @@ void *worst_fit_alloc(size_t size)
 		new_node ->next = cur_node ->next;
 		new_node ->size = cur_node->size - size - sizeof(node);
 		new_node ->state = 0;
-		cur_node ->next->prev = new_node;
+		if (cur_node -> next != NULL) {
+			cur_node ->next->prev = new_node;
+		}
 		cur_node ->size = size;
 		cur_node ->next = new_node;
 	}
@@ -178,7 +182,9 @@ void best_fit_dealloc(void *ptr)
 		if (dealloc_next != NULL) {
 			if (dealloc_next ->state == 0) {
 				dealloc_target ->size += dealloc_next ->size + sizeof(node);
-				dealloc_target ->next ->next ->prev = dealloc_target;
+				if (dealloc_target ->next ->next != NULL) {
+					dealloc_target ->next ->next ->prev = dealloc_target;
+				}
 				dealloc_target ->next = dealloc_target ->next ->next;
 				dealloc_next = dealloc_next ->next;
 			} else {
@@ -189,7 +195,9 @@ void best_fit_dealloc(void *ptr)
 		if (dealloc_prev != NULL) {
 			if (dealloc_prev ->state == 0) {
 				dealloc_target ->size += dealloc_prev ->size + sizeof(node);
-				dealloc_target ->prev ->prev ->next = dealloc_target;
+				if (dealloc_target ->prev ->prev != NULL) {
+					dealloc_target ->prev ->prev ->next = dealloc_target;
+				}
 				dealloc_target ->prev = dealloc_target ->prev ->prev;
 				dealloc_target ->start = dealloc_prev ->start;
 				dealloc_prev = dealloc_prev ->prev;
@@ -227,7 +235,9 @@ void worst_fit_dealloc(void *ptr)
 		if (dealloc_next != NULL) {
 			if (dealloc_next ->state == 0) {
 				dealloc_target ->size += dealloc_next ->size + sizeof(node);
-				dealloc_target ->next ->next ->prev = dealloc_target;
+				if (dealloc_target ->next ->next != NULL) {
+					dealloc_target ->next ->next ->prev = dealloc_target;
+				}
 				dealloc_target ->next = dealloc_target ->next ->next;
 				dealloc_next = dealloc_next ->next;
 			} else {
@@ -238,7 +248,9 @@ void worst_fit_dealloc(void *ptr)
 		if (dealloc_prev != NULL) {
 			if (dealloc_prev ->state == 0) {
 				dealloc_target ->size += dealloc_prev ->size + sizeof(node);
-				dealloc_target ->prev ->prev ->next = dealloc_target;
+				if (dealloc_target ->prev ->prev != NULL) {
+					dealloc_target ->prev ->prev ->next = dealloc_target;
+				}
 				dealloc_target ->prev = dealloc_target ->prev ->prev;
 				dealloc_target ->start = dealloc_prev ->start;
 				dealloc_prev = dealloc_prev ->prev;
