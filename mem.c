@@ -153,15 +153,22 @@ void *worst_fit_alloc(size_t size)
 				printf("%d\n", cur_node->size);
 		struct node *new_node;			
 		new_node ->start = cur_node->start + size + sizeof(struct node);
+		printf("cnm-1\n");
 		new_node ->prev = cur_node;
+		printf("cnm0\n");
 		new_node ->next = cur_node ->next;
+		////////////////////////////////////////////
 		new_node ->size = cur_node->size - size - sizeof(struct node);
+		///////////////////////////////////////
 		new_node ->state = 0;
+		printf("cnm1\n");
 		if (cur_node -> next != NULL) {
 			cur_node ->next->prev = new_node;
 		}
+		printf("cnm2\n");
 		cur_node ->size = size;
 		cur_node ->next = new_node;
+		printf("cnm3\n");
 	}
 	// To be completed by students
 	printf("qweweqe\n");
