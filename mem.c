@@ -227,59 +227,59 @@ void best_fit_dealloc(void *ptr)
 void worst_fit_dealloc(void *ptr) 
 {
 	printf("1");
-	// if (ptr == NULL) {
-	// 	return;
-	// }
-	// printf("2");
-	// struct node *temp_mem_worst = (struct node *)test_mem_worst;
-	// printf("3");
-	// int isNode = 0;
-	// while (temp_mem_worst != NULL) {
-	// 	if (ptr == temp_mem_worst) {
-	// 		isNode = 1;
-	// 		continue;
-	// 	}
-	// 	temp_mem_worst = temp_mem_worst ->next;
-	// 	printf("in\n");		
-	// }
-	// printf("out\n");
-	// if (!isNode) {
-	// 	return;
-	// }
-	// struct node *dealloc_target = (struct node *)ptr;
-	// dealloc_target ->state = 0;
-	// struct node *dealloc_prev = dealloc_target ->prev;
-	// struct node *dealloc_next = dealloc_target ->next;
-	// while (dealloc_prev != NULL || dealloc_next != NULL) {
-	// 		printf("wo tm jin lai le\n");
-	// 	if (dealloc_next != NULL) {
-	// 		if (dealloc_next ->state == 0) {
-	// 			dealloc_target ->size += dealloc_next ->size + sizeof(struct node);
-	// 			if (dealloc_target ->next ->next != NULL) {
-	// 				dealloc_target ->next ->next ->prev = dealloc_target;
-	// 			}
-	// 			dealloc_target ->next = dealloc_target ->next ->next;
-	// 			dealloc_next = dealloc_next ->next;
-	// 		} else {
-	// 			dealloc_next = NULL;
-	// 		}
-	// 	}
+	if (ptr == NULL) {
+		return;
+	}
+	printf("2");
+	struct node *temp_mem_worst = (struct node *)test_mem_worst;
+	printf("3");
+	int isNode = 0;
+	while (temp_mem_worst != NULL) {
+		printf("in\n");		
+		if (ptr == temp_mem_worst) {
+			isNode = 1;
+			continue;
+		}
+		temp_mem_worst = temp_mem_worst ->next;
+	}
+	printf("out\n");
+	if (!isNode) {
+		return;
+	}
+	struct node *dealloc_target = (struct node *)ptr;
+	dealloc_target ->state = 0;
+	struct node *dealloc_prev = dealloc_target ->prev;
+	struct node *dealloc_next = dealloc_target ->next;
+	while (dealloc_prev != NULL || dealloc_next != NULL) {
+			printf("wo tm jin lai le\n");
+		if (dealloc_next != NULL) {
+			if (dealloc_next ->state == 0) {
+				dealloc_target ->size += dealloc_next ->size + sizeof(struct node);
+				if (dealloc_target ->next ->next != NULL) {
+					dealloc_target ->next ->next ->prev = dealloc_target;
+				}
+				dealloc_target ->next = dealloc_target ->next ->next;
+				dealloc_next = dealloc_next ->next;
+			} else {
+				dealloc_next = NULL;
+			}
+		}
 
-	// 	if (dealloc_prev != NULL) {
-	// 		if (dealloc_prev ->state == 0) {
-	// 			dealloc_target ->size += dealloc_prev ->size + sizeof(struct node);
-	// 			if (dealloc_target ->prev ->prev != NULL) {
-	// 				dealloc_target ->prev ->prev ->next = dealloc_target;
-	// 			}
-	// 			dealloc_target ->prev = dealloc_target ->prev ->prev;
-	// 			dealloc_target ->start = dealloc_prev ->start;
-	// 			dealloc_prev = dealloc_prev ->prev;
-	// 		} else {
-	// 			dealloc_prev = NULL;
-	// 		}
-	// 	} 
-	// }
-	// 	printf("wo tm chu lai le\n");
+		if (dealloc_prev != NULL) {
+			if (dealloc_prev ->state == 0) {
+				dealloc_target ->size += dealloc_prev ->size + sizeof(struct node);
+				if (dealloc_target ->prev ->prev != NULL) {
+					dealloc_target ->prev ->prev ->next = dealloc_target;
+				}
+				dealloc_target ->prev = dealloc_target ->prev ->prev;
+				dealloc_target ->start = dealloc_prev ->start;
+				dealloc_prev = dealloc_prev ->prev;
+			} else {
+				dealloc_prev = NULL;
+			}
+		} 
+	}
+	printf("wo tm chu lai le\n");
 	// To be completed by students
 }
 
