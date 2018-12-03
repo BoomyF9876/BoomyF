@@ -298,10 +298,10 @@ int worst_fit_count_extfrag(size_t size)
 void print_mem_info(int type) {
 	struct node* traverse;
 	if(type == 0) {
-		traverse = (struct node*)worst_fit_mem;
+		traverse = (struct node*)test_mem_worst;
 	}
 	else if(type == 1) {
-		traverse = (struct node*)best_fit_mem;
+		traverse = (struct node*)test_mem_best;
 	}
 	
 	while(traverse != NULL){
