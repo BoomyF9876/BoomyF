@@ -146,6 +146,7 @@ void *worst_fit_alloc(size_t size)
 		printf("NULL \n");
 		return NULL;
 	}
+	printf("opopop\n");
 	cur_node->state = 1;
 	if (cur_node->size > size) {
 		struct node *new_node;			
