@@ -11,13 +11,13 @@
 #include "mem.h"
 
 /* defines */
-typedef struct {
+struct node {
 	struct node* prev;
 	struct node* next;
 	int size;
 	int state; // 1 for occupied, 0 for vacant
 	void* start;
-}node;
+};
 /* global variables */
 void *test_mem_best;
 void *test_mem_worst;
@@ -26,13 +26,13 @@ void *find_best_node (size_t size) {
 	int best_size = 9999999;
 	int full = 1;
 	int test_size;
-	node *temp_mem_best = (node *)test_mem_best;
-	node* return_node;
+	struct node *temp_mem_best = (struct node *)test_mem_best;
+	struct node* return_node;
 	while (temp_mem_best != NULL) {
 		if (!temp_mem_best ->state) {
 			test_size = temp_mem_best->size - size; 
 			if (test_size > 0 && test_size < best_size) {
-				return_node = (node *)temp_mem_best;
+				return_node = (struct node *)temp_mem_best;
 				full = 0;
 			}
 		}
@@ -45,13 +45,13 @@ void *find_worst_node (size_t size) {
 	int best_size = 0;
 	int full = 1;
 	int test_size;
-	node *temp_mem_best = (node *)test_mem_best;
-	node* return_node;
+	struct node *temp_mem_best = (struct node *)test_mem_best;
+	struct node* return_node;
 	while (temp_mem_best != NULL) {
 		if (!temp_mem_best -> state) {
 			test_size = temp_mem_best->size - size; 
 			if (test_size > 0 && test_size > best_size) {
-				return_node = (node *)temp_mem_best;
+				return_node = (struct node *)temp_mem_best;
 				full = 0;
 			}
 		}
@@ -64,13 +64,13 @@ void *find_worst_node (size_t size) {
 int best_fit_memory_init(size_t size)
 {
 	size_t size_n;
-	size_n = size + sizeof(node);
-	node *root_node;
+	size_n = size + sizeof(struct node);
+	struct node *root_node;
 	root_node->size = size;
 	root_node->state = 0;
 	test_mem_best = malloc(size_n);
 	root_node = test_mem_best;
-	root_node->start = test_mem_best + sizeof(node);
+	root_node->start = test_mem_best + sizeof(struct node);
 	root_node->prev = NULL;
 	root_node->next = NULL;
 	// To be completed by students
@@ -82,13 +82,13 @@ int best_fit_memory_init(size_t size)
 int worst_fit_memory_init(size_t size)
 {
 	size_t size_n;
-	size_n = size + sizeof(node);
-	node *root_node;
+	size_n = size + sizeof(struct node);
+	struct node *root_node;
 	root_node->size = size;
 	root_node->state = 0;
 	test_mem_worst = malloc(size_n);
 	root_node = test_mem_worst;
-	root_node->start = test_mem_worst + sizeof(node);
+	root_node->start = test_mem_worst + sizeof(struct node);
 	root_node->prev = NULL;
 	root_node->next = NULL;
 	// To be completed by students
@@ -104,17 +104,17 @@ void *best_fit_alloc(size_t size)
 	if (size_flag) {
 		size += (4 - size_flag);
 	}
-	node *cur_node = find_best_node(size);
+	struct node *cur_node = find_best_node(size);
 	if (cur_node == NULL) {
 		return NULL;
 	}
 	cur_node->state = 1;
 	if (cur_node->size > size) {
-		node *new_node;			
-		new_node ->start = cur_node->start + size + sizeof(node);
+		struct node *new_node;			
+		new_node ->start = cur_node->start + size + sizeof(struct node);
 		new_node ->prev = cur_node;
 		new_node ->next = cur_node ->next;
-		new_node ->size = cur_node->size - size - sizeof(node);
+		new_node ->size = cur_node->size - size - sizeof(struct node);
 		new_node ->state = 0;
 		if (cur_node -> next != NULL) {
 			cur_node ->next -> prev = new_node;
@@ -133,13 +133,13 @@ void *worst_fit_alloc(size_t size)
 	if (size_flag) {
 		size += (4 - size_flag);
 	}
-	node *cur_node = find_worst_node(size);
+	struct node *cur_node = find_worst_node(size);
 	if (cur_node == NULL) {
 		return NULL;
 	}
 	cur_node->state = 1;
 	if (cur_node->size > size) {
-		node *new_node;			
+		struct node *new_node;			
 		new_node ->start = cur_node->start + size + sizeof(node);
 		new_node ->prev = cur_node;
 		new_node ->next = cur_node ->next;
@@ -162,7 +162,7 @@ void best_fit_dealloc(void *ptr)
 	if (ptr == NULL) {
 		return;
 	}
-	node *temp_mem_best = (node *)test_mem_best;
+	struct node *temp_mem_best = (struct node *)test_mem_best;
 	int isNode = 0;
 	while (temp_mem_best != NULL) {
 		if (ptr == temp_mem_best) {
@@ -174,14 +174,14 @@ void best_fit_dealloc(void *ptr)
 	if (!isNode) {
 		return;
 	}
-	node *dealloc_target = (node *)ptr;
+	struct node *dealloc_target = (struct node *)ptr;
 	dealloc_target ->state = 0;
-	node *dealloc_prev = dealloc_target ->prev;
-	node *dealloc_next = dealloc_target ->next;
+	struct node *dealloc_prev = dealloc_target ->prev;
+	struct node *dealloc_next = dealloc_target ->next;
 	while (dealloc_prev != NULL || dealloc_next != NULL) {
 		if (dealloc_next != NULL) {
 			if (dealloc_next ->state == 0) {
-				dealloc_target ->size += dealloc_next ->size + sizeof(node);
+				dealloc_target ->size += dealloc_next ->size + sizeof(struct node);
 				if (dealloc_target ->next ->next != NULL) {
 					dealloc_target ->next ->next ->prev = dealloc_target;
 				}
@@ -194,7 +194,7 @@ void best_fit_dealloc(void *ptr)
 
 		if (dealloc_prev != NULL) {
 			if (dealloc_prev ->state == 0) {
-				dealloc_target ->size += dealloc_prev ->size + sizeof(node);
+				dealloc_target ->size += dealloc_prev ->size + sizeof(struct node);
 				if (dealloc_target ->prev ->prev != NULL) {
 					dealloc_target ->prev ->prev ->next = dealloc_target;
 				}
@@ -215,7 +215,7 @@ void worst_fit_dealloc(void *ptr)
 	if (ptr == NULL) {
 		return;
 	}
-	void *temp_mem_best = test_mem_best;
+	struct node *temp_mem_best = (struct node *)test_mem_best;
 	int isNode = 0;
 	while (temp_mem_best != NULL) {
 		if (ptr == temp_mem_best) {
@@ -227,14 +227,14 @@ void worst_fit_dealloc(void *ptr)
 	if (!isNode) {
 		return;
 	}
-	node *dealloc_target = (node *)ptr;
+	struct node *dealloc_target = (struct node *)ptr;
 	dealloc_target ->state = 0;
-	node *dealloc_prev = dealloc_target ->prev;
-	node *dealloc_next = dealloc_target ->next;
+	struct node *dealloc_prev = dealloc_target ->prev;
+	struct node *dealloc_next = dealloc_target ->next;
 	while (dealloc_prev != NULL || dealloc_next != NULL) {
 		if (dealloc_next != NULL) {
 			if (dealloc_next ->state == 0) {
-				dealloc_target ->size += dealloc_next ->size + sizeof(node);
+				dealloc_target ->size += dealloc_next ->size + sizeof(struct node);
 				if (dealloc_target ->next ->next != NULL) {
 					dealloc_target ->next ->next ->prev = dealloc_target;
 				}
@@ -247,7 +247,7 @@ void worst_fit_dealloc(void *ptr)
 
 		if (dealloc_prev != NULL) {
 			if (dealloc_prev ->state == 0) {
-				dealloc_target ->size += dealloc_prev ->size + sizeof(node);
+				dealloc_target ->size += dealloc_prev ->size + sizeof(struct node);
 				if (dealloc_target ->prev ->prev != NULL) {
 					dealloc_target ->prev ->prev ->next = dealloc_target;
 				}
@@ -269,7 +269,7 @@ void worst_fit_dealloc(void *ptr)
 int best_fit_count_extfrag(size_t size)
 {
 	int count;
-	node *temp_mem_best = test_mem_best;
+	struct node *temp_mem_best = test_mem_best;
 	while (temp_mem_best != NULL) {
 		if (temp_mem_best ->state == 0 && temp_mem_best ->size < size) {
 			count++;
@@ -283,7 +283,7 @@ int best_fit_count_extfrag(size_t size)
 int worst_fit_count_extfrag(size_t size)
 {
 	int count;
-	node *temp_mem_worst = test_mem_worst;
+	struct node *temp_mem_worst = test_mem_worst;
 	while (temp_mem_worst != NULL) {
 		if (temp_mem_worst ->state == 0 && temp_mem_worst ->size < size) {
 			count++;
