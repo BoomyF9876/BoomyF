@@ -55,6 +55,7 @@ void *find_worst_node (size_t size) {
 			if (test_size > 0 && test_size > best_size) {
 				printf("asdad\n");
 				return_node = (struct node *)temp_mem_worst;
+				printf("meiyouzher\n");
 				full = 0;
 			}
 		}
