@@ -66,10 +66,10 @@ int best_fit_memory_init(size_t size)
 	size_t size_n;
 	size_n = size + sizeof(struct node);
 	struct node *root_node;
-	root_node->size = size;
-	root_node->state = 0;
 	test_mem_best = malloc(size_n);
 	root_node = test_mem_best;
+	root_node->size = size;
+	root_node->state = 0;
 	root_node->start = test_mem_best + sizeof(struct node);
 	root_node->prev = NULL;
 	root_node->next = NULL;
@@ -84,10 +84,10 @@ int worst_fit_memory_init(size_t size)
 	size_t size_n;
 	size_n = size + sizeof(struct node);
 	struct node *root_node;
-	root_node->size = size;
-	root_node->state = 0;
 	test_mem_worst = malloc(size_n);
 	root_node = test_mem_worst;
+	root_node->size = size;
+	root_node->state = 0;
 	root_node->start = test_mem_worst + sizeof(struct node);
 	root_node->prev = NULL;
 	root_node->next = NULL;
