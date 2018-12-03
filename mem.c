@@ -131,15 +131,17 @@ void *best_fit_alloc(size_t size)
 
 void *worst_fit_alloc(size_t size)
 {
-	printf("entered 0");
+	printf("entered 0\n");
 	int size_flag = size % 4;
 	if (size_flag) {
 		size += (4 - size_flag);
 	}
 	struct node *cur_node = find_worst_node(size);
 	if (cur_node == NULL) {
+		printf("NULL \n");
 		return NULL;
 	}
+		printf("asdiahdiashsd \n");
 	cur_node->state = 1;
 	if (cur_node->size > size) {
 		struct node *new_node;			
