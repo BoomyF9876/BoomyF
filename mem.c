@@ -239,7 +239,9 @@ void worst_fit_dealloc(void *ptr)
 			continue;
 		}
 		temp_mem_worst = temp_mem_worst ->next;
+		printf("in\n");		
 	}
+	printf("out\n");
 	if (!isNode) {
 		return;
 	}
@@ -248,6 +250,7 @@ void worst_fit_dealloc(void *ptr)
 	struct node *dealloc_prev = dealloc_target ->prev;
 	struct node *dealloc_next = dealloc_target ->next;
 	while (dealloc_prev != NULL || dealloc_next != NULL) {
+			printf("wo tm jin lai le\n");
 		if (dealloc_next != NULL) {
 			if (dealloc_next ->state == 0) {
 				dealloc_target ->size += dealloc_next ->size + sizeof(struct node);
@@ -275,6 +278,7 @@ void worst_fit_dealloc(void *ptr)
 			}
 		} 
 	}
+		printf("wo tm chu lai le\n");
 	// To be completed by students
 	return;
 }
