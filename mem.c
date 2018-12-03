@@ -140,10 +140,10 @@ void *worst_fit_alloc(size_t size)
 	cur_node->state = 1;
 	if (cur_node->size > size) {
 		struct node *new_node;			
-		new_node ->start = cur_node->start + size + sizeof(node);
+		new_node ->start = cur_node->start + size + sizeof(struct node);
 		new_node ->prev = cur_node;
 		new_node ->next = cur_node ->next;
-		new_node ->size = cur_node->size - size - sizeof(node);
+		new_node ->size = cur_node->size - size - sizeof(struct node);
 		new_node ->state = 0;
 		if (cur_node -> next != NULL) {
 			cur_node ->next->prev = new_node;
