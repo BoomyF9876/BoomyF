@@ -15,7 +15,6 @@
    Do not include more user-defined header files here
  */
 #include "mem.h"
-// TODO: void print_mem_info(){}
 
 //tests deallocation and merging free blocks
 //fills mem space then deallocates blocks from left to right and merges
@@ -28,23 +27,23 @@ void test_worst_fit() {
 	void* c = worst_fit_alloc(210);
 	void* d = worst_fit_alloc(205);
 
-	print_mem(0);
+	print_mem_worst();
 
 	worst_fit_dealloc(a);
 	printf("Block 1 is freed.\n");
-	print_mem(0);
+	print_mem_worst();
 
 	worst_fit_dealloc(b);
 	printf("Block 2 is freed.\n");
-	print_mem(0);
+	print_mem_worst();
 
 	worst_fit_dealloc(c);
 	printf("Block 3 is freed.\n");
-	print_mem(0);
+	print_mem_worst();
 
 	worst_fit_dealloc(d);
 	printf("Block 4 is freed.\n");
-	print_mem(0);
+	print_mem_worst();
 
 	return;
 }
@@ -58,29 +57,30 @@ void test_best_fit() {
 	void* c = best_fit_alloc(210);
 	void* d = best_fit_alloc(205);
 
-	print_mem(1);
+	print_mem_best();
 
 	best_fit_dealloc(a);
 	printf("Block 1 is freed.\n");
-	print_mem(1);
+	print_mem_best();
 
 	best_fit_dealloc(b);
 	printf("Block 2 is freed.\n");
-	print_mem(1);
+	print_mem_best();
 
 	best_fit_dealloc(c);
 	printf("Block 3 is freed.\n");
-	print_mem(1);
+	print_mem_best();
 
 	best_fit_dealloc(d);
 	printf("Block 4 is freed.\n");
-	print_mem(1);
+	print_mem_best();
 
 	return;
 }
 
-void worst_vs_best_fragments() { 
-	printf("Test Worst Fit Vs. Best Fit Fragments: Best Fit Case \n");
+void worst_vs_best() { 
+	printf("Test Worst Fit Vs. Best Fit\n");
+	printf("Best Fit: \n");
 	int result = best_fit_memory_init(1200);
 	if(result == -1){
 		return;
@@ -106,9 +106,8 @@ void worst_vs_best_fragments() {
 	void *h = best_fit_alloc(100);
 	
 
-	printf("After allocating \n");
-	print_mem(1);
-	printf("---\n");
+	printf("Allocation Finished. \n");
+	print_mem_best();
 
 	best_fit_dealloc(a);
 	best_fit_dealloc(b);
@@ -119,8 +118,8 @@ void worst_vs_best_fragments() {
 	best_fit_dealloc(g);
 	best_fit_dealloc(h);
 	
-	printf("After deallocating \n");
-	print_mem(1);
+	printf("Deallocation Finished. \n");
+	print_mem_best();
 	printf("---\n");
 
 	best_fit_alloc(8);
@@ -129,11 +128,9 @@ void worst_vs_best_fragments() {
 	best_fit_alloc(8);
 
 	printf("After allocating 8\n");
-	print_mem(1);
-	printf("---\n");
+	print_mem_best();
 
 	printf("Best fit fragmentation count below 8 bytes: %d \n", best_fit_count_extfrag(8));
-	printf("---\n");
 
 	printf("Test Worst Fit Vs. Best Fit Fragments: Worst Fit Case \n");
 	int result2 = worst_fit_memory_init(1236);
@@ -162,7 +159,7 @@ void worst_vs_best_fragments() {
 	
 
 	printf("After allocating \n");
-	print_mem(0);
+	print_mem_worst();
 	printf("---\n");
 
 	worst_fit_dealloc(a2);
@@ -175,7 +172,7 @@ void worst_vs_best_fragments() {
 	worst_fit_dealloc(h2);
 	
 	printf("After deallocating \n");
-	print_mem(0);
+	print_mem_worst();
 	printf("---\n");
 
 	worst_fit_alloc(8);
@@ -184,22 +181,20 @@ void worst_vs_best_fragments() {
 	worst_fit_alloc(8);
 
 	printf("After allocating 8 \n");
-	print_mem(0);
-	printf("---\n");
+	print_mem_worst();
 
 	printf("worst fit fragmentation count below 8 bytes: %d \n", worst_fit_count_extfrag(8));
-	printf("---\n");
 
 }
 
-void best_vs_worst_large_data() {
-	worst_fit_memory_init(2124);
+void worst_vs_best_large_data() {
+	worst_fit_memory_init(2500);
 	void* a = worst_fit_alloc(1000);
 	worst_fit_alloc(4);
 	void* b = worst_fit_alloc(1000);
 	worst_fit_dealloc(a);
 	worst_fit_dealloc(b);
-	best_fit_memory_init(2124);
+	best_fit_memory_init(2500);
 	void* c = best_fit_alloc(1000);
 	best_fit_alloc(4);
 	void* d = best_fit_alloc(1000);
@@ -212,17 +207,17 @@ void best_vs_worst_large_data() {
 		best_fit_alloc(20);
 	}
 
-	void* kB_worst = worst_fit_alloc(1000);
-	void* kB_best = best_fit_alloc(1000);
+	void* test_worst = worst_fit_alloc(1000);
+	void* test_best = best_fit_alloc(1000);
 
-	printf("worst kB: %lu best kB: %lu\n", (long unsigned int)kB_worst, (long unsigned int)kB_best);
+	printf("worst: %lu best: %lu\n", (long unsigned int)test_worst, (long unsigned int)test_best);
 }
 
 int main(int argc, char *argv[]) {
 	test_worst_fit();
 	test_best_fit();
-	worst_vs_best_fragments();
-	best_vs_worst_large_data();
+	worst_vs_best();
+	worst_vs_best_large_data();
 
 	return 0;
 }

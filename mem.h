@@ -10,7 +10,8 @@
 
 #include <stddef.h>
 
-void print_mem(int type);
+void print_mem_best();
+void print_mem_worst();
 /* memory initializers */
 int best_fit_memory_init(size_t size);
 int worst_fit_memory_init(size_t size);

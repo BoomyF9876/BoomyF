@@ -289,9 +289,17 @@ int worst_fit_count_extfrag(size_t size)
 	return count;
 }
 
-void print_mem(int type) {
-	struct node* test_node;
-	test_node = (type == 0) ? (struct node*)test_mem_worst : (struct node*)test_mem_best; 
+void print_mem_best() {
+	struct node* test_node = (struct node*)test_mem_best; 
+	while(test_node != NULL){
+		printf("Root Node Address: %lu\tSize: %d\tState: %d\n",
+			(long unsigned int)test_node, test_node->size, test_node->state);
+		test_node = test_node->next;
+	}
+}
+
+void print_mem_worst() {
+	struct node* test_node = (struct node*)test_mem_worst; 
 	while(test_node != NULL){
 		printf("Root Node Address: %lu\tSize: %d\tState: %d\n",
 			(long unsigned int)test_node, test_node->size, test_node->state);
