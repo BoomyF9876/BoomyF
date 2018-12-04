@@ -16,8 +16,6 @@
  */
 #include "mem.h"
 
-//tests deallocation and merging free blocks
-//fills mem space then deallocates blocks from left to right and merges
 void test_worst_fit() {
 	printf("Test Worst Fit \n");
 	worst_fit_memory_init(1000);
@@ -120,7 +118,6 @@ void worst_vs_best() {
 	
 	printf("Deallocation Finished. \n");
 	print_mem_best();
-	printf("---\n");
 
 	best_fit_alloc(8);
 	best_fit_alloc(8);
@@ -132,7 +129,7 @@ void worst_vs_best() {
 
 	printf("Best fit fragmentation count below 8 bytes: %d \n", best_fit_count_extfrag(8));
 
-	printf("Test Worst Fit Vs. Best Fit Fragments: Worst Fit Case \n");
+	printf("Worst Fit: \n");
 	int result2 = worst_fit_memory_init(1236);
 	if(result2 == -1){
 		return;
@@ -160,7 +157,6 @@ void worst_vs_best() {
 
 	printf("After allocating \n");
 	print_mem_worst();
-	printf("---\n");
 
 	worst_fit_dealloc(a2);
 	worst_fit_dealloc(b2);
@@ -173,7 +169,6 @@ void worst_vs_best() {
 	
 	printf("After deallocating \n");
 	print_mem_worst();
-	printf("---\n");
 
 	worst_fit_alloc(8);
 	worst_fit_alloc(8);
