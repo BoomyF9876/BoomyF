@@ -15,7 +15,7 @@ struct node {
 	struct node* prev;
 	struct node* next;
 	int size;
-	int state; // 1 for occupied, 0 for vacant
+	int state; 	// 1 for occupied, 0 for vacant
 	void* start;
 };
 /* global variables */
@@ -31,7 +31,7 @@ void *find_best_node (size_t size) {
 	while (temp_mem_best != NULL) {
 		if (!temp_mem_best ->state) {
 			test_size = temp_mem_best->size - size; 
-			if (test_size > 0 && test_size < best_size) {
+			if (test_size > sizeof(struct node) && test_size < best_size) {
 				return_node = (struct node *)temp_mem_best;
 				full = 0;
 			}
@@ -50,7 +50,7 @@ void *find_worst_node (size_t size) {
 	while (temp_mem_worst != NULL) {
 		if (!temp_mem_worst -> state) {
 			test_size = temp_mem_worst->size - size;
-			if (test_size > 0 && test_size > best_size) {
+			if (test_size > sizeof(struct node) && test_size > best_size) {
 				return_node = (struct node *)temp_mem_worst;
 				full = 0;
 			}
@@ -91,7 +91,6 @@ int worst_fit_memory_init(size_t size)
 	root_node->start = test_mem_worst + sizeof(struct node);
 	root_node->prev = NULL;
 	root_node->next = NULL;
-	//printf("adaadadadada %d \n", root_node->size);
 	// To be completed by students
 	// You call malloc once here to obtain the memory to be managed.
 	return 0;
@@ -101,7 +100,6 @@ int worst_fit_memory_init(size_t size)
 /* memory allocators */
 void *best_fit_alloc(size_t size)
 {
-	//printf("entered 1");
 	int size_flag = size % 4;
 	if (size_flag) {
 		size += (4 - size_flag);
@@ -131,45 +129,29 @@ void *best_fit_alloc(size_t size)
 
 void *worst_fit_alloc(size_t size)
 {
-	//printf("entered 0\n");
 	int size_flag = size % 4;
 	if (size_flag) {
 		size += (4 - size_flag);
 	}
 	struct node *cur_node = find_worst_node(size);
 	if (cur_node == NULL) {
-		//printf("NULL \n");
 		return NULL;
 	}
-	//printf("opopop\n");
 	cur_node->state = 1;
-		//printf("%d\n", cur_node->size);
-	if (cur_node->size > size) {
-				//printf("%d\n", cur_node->size);
+	if (cur_node->size > size + sizeof(struct node)) {
 		struct node *new_node = cur_node->start + size;
-		//printf("cnm-2\n");		
 		new_node ->start = cur_node->start + size + sizeof(struct node);
-		//printf("cnm-1\n");
 		new_node ->prev = cur_node;
-		//printf("cnm0\n");
 		new_node ->next = cur_node ->next;
-		////////////////////////////////////////////
 		new_node ->size = cur_node->size - size - sizeof(struct node);
-		///////////////////////////////////////
 		new_node ->state = 0;
-		//printf("cnm1\n");
 		if (cur_node -> next != NULL) {
 			cur_node ->next->prev = new_node;
 		}
-		//printf("cnm2\n");
 		cur_node ->size = size;
 		cur_node ->next = new_node;
-		//printf("cnm3\n");
 	}
-	// To be completed by students
-	//printf("qweweqe\n");
 	return cur_node;
-	// To be completed by students
 }
 
 /* memory de-allocator */
@@ -278,7 +260,7 @@ void worst_fit_dealloc(void *ptr)
 
 /* memory algorithm metric utility function(s) */
 
-/* count how many free blocks are less than the input size */ 
+/* count how many free blocks are less than the input size */
 int best_fit_count_extfrag(size_t size)
 {
 	int count;
@@ -307,19 +289,12 @@ int worst_fit_count_extfrag(size_t size)
 	return count;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void print_mem_info(int type) {
-	struct node* traverse;
-	if(type == 0) {
-		traverse = (struct node*)test_mem_worst;
-	}
-	else if(type == 1) {
-		traverse = (struct node*)test_mem_best;
-	}
-	
-	while(traverse != NULL){
-		printf("Control Address: %lu\tSize: %d\tState: %d\n",
-			(long unsigned int)traverse, traverse->size, traverse->state);
-		traverse=traverse->next;
+void print_mem(int type) {
+	struct node* test_node;
+	test_node = (type == 0) ? (struct node*)test_mem_worst : (struct node*)test_mem_best; 
+	while(test_node != NULL){
+		printf("Root Node Address: %lu\tSize: %d\tState: %d\n",
+			(long unsigned int)test_node, test_node->size, test_node->state);
+		test_node = test_node->next;
 	}
 }
